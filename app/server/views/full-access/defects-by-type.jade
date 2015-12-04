@@ -1,0 +1,142 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/image
+
+    //- function defectsByAnswerTimeAscending(a, b) { var as = a.answer_time.toLowerCase(), bs = b.answer_time.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    //- defects = defects.sort(defectsByAnswerTimeAscending);
+
+    style.
+        .defect-class-container {
+        }
+        .defect-class-container .header {
+            padding: 10px;
+            margin-bottom: 0;
+            background-color: #0022FF;
+            color: #eee;
+        }
+        .defect-class-container .body {
+            margin: 10px;
+        }
+        .defect-row > div:first-child {
+            width: 500px;
+        }
+        .defect-row > div:nth-child(2) {
+            width: 500px;
+        }
+        .defect-container {
+            background-color: rgba(209,0,0,.5);
+            margin-bottom: 15px;
+            box-shadow: 0px 1px 3px #666;
+        }
+        .defect-container .defect-label {
+            min-width: 100px;
+            font-weight: bold;
+            float: left;
+            color: #333;
+        }
+        .defect-container .defect-value {
+            color: #eee;
+            float: left;
+        }
+        .defect-row .defect-item {
+            float: left;
+        }
+        .alert-container {
+            background-color: rgba(238,238,0,.65);
+            box-shadow: 0px 1px 3px #666;
+            margin-bottom: 15px;
+        }
+        .alert-container .defect-label {
+            min-width: 100px;
+            font-weight: bold;
+            float: left;
+            color: #333;
+        }
+        .alert-container .defect-value {
+            color: #333;
+            float: left;
+        }
+        .alert-container .defect-value a {
+            color: #099;
+            float: left;
+        }
+        @media (max-width: 979px) {
+            .defect-container .defect-label,
+            .alert-container .defect-label {
+                min-width: 80px;
+            }
+        }
+
+    mixin navbar()
+    mixin image_dialog()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Defects
+        - each defect_key in Object.keys(defects)
+            -if(defects[defect_key].length > 0)
+                .defect-class-container
+                    - each defect in defects[defect_key]
+                        .well.clearfix(class=defect.conformance=='alert' ? 'alert-container' : 'defect-container')
+                            .pull-left
+                                .clearfix.defect-row
+                                    .defect-item
+                                        .defect-label Defect
+                                        .defect-value(style="text-decoration: underline;")
+                                            -each answer in defect.answers
+                                                -if(answer.value == 'true' && defect.category_specific == 5 || defect.category_specific == 6)
+                                                    =answer.text
+                                                -else if(answer.category_specific == 2 || answer.category_specific == 3 || answer.category_specific == 4)
+                                                    =answer.text
+                                    .defect-item
+                                        .defect-label Visit
+                                        .defect-value
+                                            a(href='/visit/view/' + defect.sample.visit_id)
+                                                =defect.sample.visit_info.pos_name + ' ' + defect.sample.visit_info.date_of_visit
+                                .clearfix.defect-row
+                                    .defect-item
+                                        .defect-label Defect Type
+                                        .defect-value
+                                            =defect.level5_description2
+                                    .defect-item
+                                        .defect-label Product
+                                        .defect-value
+                                            a(href='/product/view/' + defect.sample.product_id)
+                                                =defect.sample.product_info.name
+                                .clearfix.defect-row
+                                    .defect-item
+                                        .defect-label Sample
+                                        .defect-value
+                                            =defect.sample.name
+                                    .defect-item
+                                        .defect-label Auditor
+                                        .defect-value
+                                            =defect.sample.visit_info.auditor_name
+                            .pull-right
+                                button.btn.btn-primary(onclick='window.location.href="/sample/view/' + defect.sample._id + '?questionId=' + defect.identity_id + '"')
+                                    i.icon-search(style="padding-left: 0;")
+                            -if(defect.image_urls && defect.image_urls.length > 0)
+                                .pull-right
+                                    img.imagepreview(style="margin-right: 10px; width: 48px;", image-url=defect.image_urls[0], src='/img/has-image.png')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script.
+        $(function($) {
+            //$('table').tablesorter( { sortList: [[0,0] ] });
+
+            $('img.imagepreview').click(function(e) {
+                var imgUi = $(e.target).clone();
+                imgUi.attr('src', imgUi.attr('image-url'));
+                $(imgUi).css('height', '').css('width', '100%');
+                $(imgUi).removeClass('imagepreview');
+                var imgDlg = $('#imageDialog');
+                imgDlg.find('.full-size-image').empty().append(imgUi);
+                imgDlg.modal();
+            });
+        });

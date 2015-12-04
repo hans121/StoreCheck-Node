@@ -1,0 +1,185 @@
+{
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "required":true,
+    "properties":{
+        "active_end_date": {
+            "type":"string"
+        },
+        "active_start_date": {
+            "type":"string"
+        },
+        "active": {
+            "type":"string"
+        },
+        "added_by_user_code": {
+            "type":"string"
+        },
+        "alert_infocenter_code": {
+            "type":"string"
+        },
+        "category_id": {
+            "type":"string"
+        },
+        "category_specific": {
+            "type":"string"
+        },
+        "changed_by_user_code": {
+            "type":"string"
+        },
+        "code": {
+            "type":"string"
+        },
+        "company_id": {
+            "type":"string"
+        },
+        "date_added": {
+            "type":"string"
+        },
+        "date_changed": {
+            "type":"string"
+        },
+        "default_factory": {
+            "type":"string"
+        },
+        "description2": {
+            "type":"string"
+        },
+        "description3": {
+            "type":"string"
+        },
+        "description": {
+            "type":"string"
+        },
+        "e06_code": {
+            "type":"string"
+        },
+        "e08_code": {
+            "type":"string"
+        },
+        "e09_code": {
+            "type":"string"
+        },
+        "e10_code": {
+            "type":"string"
+        },
+        "e11_code": {
+            "type":"string"
+        },
+        "e13_code": {
+            "type":"string"
+        },
+        "e15_code": {
+            "type":"string"
+        },
+        "e18_code": {
+            "type":"string"
+        },
+        "e19_code": {
+            "type":"string"
+        },
+        "e20_code": {
+            "type":"string"
+        },
+        "e21_code": {
+            "type":"string"
+        },
+        "e24_code": {
+            "type":"string"
+        },
+        "e25_code": {
+            "type":"string"
+        },
+        "ean_13": {
+            "type":"string"
+        },
+        "flavor": {
+            "type":"string"
+        },
+        "format": {
+            "type":"string"
+        },
+        "full_case_required": {
+            "type":"string"
+        },
+        "global_brand": {
+            "type":"string"
+        },
+        "identity_id": {
+            "type":"string"
+        },
+        "infocenter_code": {
+            "type":"string"
+        },
+        "item_number": {
+            "type":"string"
+        },
+        "mfg": {
+            "type":"string"
+        },
+        "organization_description": {
+            "type":"string"
+        },
+        "organization": {
+            "type":"string"
+        },
+        "parent": {
+            "type":"object",
+            "properties": {
+                "code": {
+                    "type":"string"
+                },
+                "description1": {
+                    "type":"string",
+                    "id": "http://jsonschema.net/parent/description1",
+                    "required":false
+                },
+                "description2": {
+                    "type":"string",
+                    "id": "http://jsonschema.net/parent/description2",
+                    "required":false
+                },
+                "description3": {
+                    "type":"string",
+                    "id": "http://jsonschema.net/parent/description3",
+                    "required":false
+                },
+                "identity_id": {
+                    "type":"string",
+                    "id": "http://jsonschema.net/parent/identity_id",
+                    "required":false
+                },
+                "parent": {
+                    "type":"object"
+                },
+                "sequence": {
+                    "type":"string"
+                }
+            }
+        },
+        "pickup": {
+            "type":"string"
+        },
+        "product_code": {
+            "type":"string"
+        },
+        "product_description": {
+            "type":"string"
+        },
+        "sequence": {
+            "type":"string"
+        },
+        "storeCheckSampleCandidate": {
+            "type":"string"
+        },
+        "text_search": {
+            "type":"string"
+        },
+        "type": {
+            "type":"string"
+        },
+        "upc": {
+            "type":"string"
+        }
+    }
+}

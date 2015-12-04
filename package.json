@@ -1,0 +1,52 @@
+{
+	"name": "store-check",
+	"version": "0.2.0",
+	"description": "Store check app, originally intended for use by Danone International",
+	"author": {
+		"name": "Mark Dickson",
+		"email": "mardic@astutesolutions.com"
+	},
+	"website":{
+		"url": "www.astutesolutions.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://bitbucket.org/AstuteSolutions/storecheck.git"
+	},
+	"private": true,
+	"dependencies": {
+		"JSV": "4.0.2",
+	    "async": "0.2.9",
+	    "aws-sdk": "1.5.0",
+	    "config": "0.4.29",
+	    "connect-mongo": "0.3.3",
+	    "csv": "0.3.7",
+	    "diskspace": "0.1.5",
+	    "emailjs": "0.3.3",
+	    "express": "3.0.6",
+	    "googlemaps": "0.1.9",
+	    "jade": "0.27.7",
+	    "moment": "2.4.0",
+	    "mongodb": "^1.4.x",
+	    "mongoose": "^4.0.1",
+	    "node-mongo-backup-manager": "git+https://github.com/markdicksonjr/node-mongo-backup-manager.git",
+	    "node-response-time-tracking": "git+https://github.com/markdicksonjr/node-response-time-tracking.git",
+	    "node-schedule": "0.1.13",
+	    "node-server-monitor": "git+https://bitbucket.org/AstuteSolutions/node-server-monitor.git",
+	    "node-zip": "*",
+	    "on-headers": "*",
+	    "request": "*",
+	    "semaphore": "*",
+	    "ssh2": "0.3.6",
+	    "stylus": "0.31.0",
+	    "tar.gz": "*",
+	    "underscore": "1.6.0",
+	    "winston": "^0.9.0",
+	    "winston-mongodb": "<1.x",
+	    "newrelic": "~1.18.4"
+	},
+	"engines": {
+		"node": "0.8.14",
+		"npm":  "1.1.65"
+	}
+}

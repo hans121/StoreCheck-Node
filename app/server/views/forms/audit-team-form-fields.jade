@@ -1,0 +1,9 @@
+mixin audit_team_form_fields(item, users)
+    - item = typeof(item) !== 'undefined' ? item : { name: '', location: '', members: [], created: '' };
+    - users = typeof(users) !== 'undefined' ? users : [];
+
+    div
+        #audit-team-name-cg.form-group
+            label.control-label.col-sm-4(for='audit-team-name-cg') Name
+            .col-sm-8
+                input.audit-team-name-input(type='text', name='name', style="width: 100%", value= item.name)

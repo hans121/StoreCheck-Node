@@ -1,0 +1,50 @@
+mixin audit_team_user_list(users, showActiveColumn, showControls)
+    table.table.table-bordered.table-striped(style="margin-bottom: 0;")
+        thead
+            tr
+                th Name
+                th Username
+                th Role
+                //-th Email
+                if(showActiveColumn)
+                    th(style='width:65px') Active
+                if(showControls)
+                    th(style='width:100px')
+                else
+                    th(style='width:20px')
+        tbody
+            - for (var i = 0; i < users.length; i++)
+                tr
+                    td
+                        a(href="/user/view/" + users[i]._id)
+                            =users[i].name
+                    td= users[i].user
+                    td= users[i].roles ? users[i].roles[0] : ""
+                        -if(!showActiveColumn && users[i].state != 'active')
+                            i(style="color: #aa0000; margin-left: 5px;").icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Inactive user")
+                    //-td= users[i].email
+                    if(showActiveColumn)
+                        if(users[i].state == "inactive")
+                            td(style="width: 65px; text-align: center;")
+                        else
+                            td(style="width: 65px; text-align: center;")
+                                i.icon-ok
+                    td
+                        div(align="right")
+                            if(showControls)
+                                a(href="/user/view/" + users[i]._id, style="color: #00aa00;")
+                                    i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                a(onclick="removeUser(\"#{team._id}\",  \"" + users[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #ffaa00;")
+                                    i.icon-cut.ui-tooltip(data-placement="bottom", data-original-title="Remove from team")
+                                -if(users[i].state == 'active')
+                                    a(onclick="deactivateUser(\""+ users[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                        i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Deactivate user")
+                                - else
+                                    a(onclick="activateUser(\""+ users[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #00aa00;")
+                                        i.icon-play-sign.ui-tooltip(data-placement="bottom", data-original-title="Activate user")
+                                -if(caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1)
+                                    a(onclick="deleteUser(\"" + users[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                        i.icon-trash.ui-tooltip(data-placement="bottom", data-original-title="Delete user")
+                            -else
+                                a.btn.btn-primary.btn-xs(onclick="addUser(\"#{team._id}\",  \"" + users[i]._id + "\");", style="margin-bottom: 3px; cursor: pointer;;")
+                                    |add to team

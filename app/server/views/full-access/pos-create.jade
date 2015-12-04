@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/pos-form-fields
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        div(style="max-width: 1100px;")
+            form( method="post").form-horizontal.well
+                h3 Add New Point of Sale
+                hr
+                mixin pos_form_fields(undefined)
+                .form-actions
+                    .pull-right
+                        button(type='button').pos-edit-form-btn-cancel.btn.btn-warning Cancel
+                        button(type='button').pos-edit-form-btn-create.btn.btn-primary Create
+
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/pointOfSaleController.js')
+    script.
+        var posController;
+        $(function($){
+            posController = new PointOfSaleController();
+            point_of_sale_form.init(posController);
+        });

@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    - function storeChecksByNameAscending(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - checks = checks.sort(storeChecksByNameAscending);
+
+    - storecheck_help_text = "Select a store check from the list of those assigned to your team";
+    - if(caller.roles.indexOf('admin') != -1) { storecheck_help_text = "Select a store check from among all in the system"; }
+
+    mixin navbar()
+    div.container-fluid
+        mixin message_bar_container()
+        h3.pull-left Store Check
+        .pull-left(style="margin-left: 10px;")
+            select.select-store-check(style="min-width: 180px;", data-placeholder="Select a store check")
+                option
+                -each check in checks
+                    option(value=check._id)= check.name
+        .help-me-widget.ui-popover.pull-left(style="margin-top: 2px; vertical-align: top;", title="Visits", data-trigger="hover", data-placement="bottom", data-content=storecheck_help_text)
+            i.icon-question(style="margin-left: -1px;")
+        span.store-check-description-container.pull-left(style="margin-left: 25px; text-shadow: none;")
+            -for(var i=0; i<checks.length; i++)
+                span(class=checks[i]._id, style="display: none;")
+                    -if(checks[i].notes.length > 0)
+                        span(style="font-size: 15px; font-weight: bold;")
+                            ='Store Check Description: '
+                        span(style="font-size: 15px; font-weight: normal;")
+                            =checks[i].notes
+        div(style="clear: both")
+            .pull-left
+                h3 Visits
+            .pull-right
+                span.select2-fix
+                    select.visit-state-select(style="width: 100px;")
+                        option(value="draft") Draft
+                        option(value="submitted") Submitted
+                -if(caller.roles.indexOf('admin') == -1)
+                    button.btn.btn-primary.btn-new-visit.submit-button New Visit
+            .clearfix
+        div.visit-list-container(style="overflow: auto;")
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    link(type='text/css', href='/vendor/css/tablesorter.css',  rel='stylesheet')
+    script(src='/vendor/moment.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/visitController.js')
+    script(src='/vendor/select2.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.widgets.min.js')
+    script.
+        var vc;
+        $(function() {
+
+            $('select.select-store-check').select2({
+                placeholder: "Select a store check",
+                allowClear: true
+            });
+
+            $('select.visit-state-select').select2({
+                placeholder: "Select a visit state",
+                allowClear: false
+            });
+
+            vc = new VisitController();
+            vc.init();
+
+            $('select.select-store-check').change(function() {
+                vc.onStoreCheckSelected($('select.select-store-check').val(), $('select.visit-state-select').val());
+            });
+
+            $('select.visit-state-select').change(function(e) {
+                vc.onStoreCheckSelected(vc.getSelectedStoreCheck(), $('select.visit-state-select').val());
+            });
+        });

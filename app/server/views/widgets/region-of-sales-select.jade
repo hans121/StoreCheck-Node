@@ -1,0 +1,7 @@
+block append scripts
+    //-link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    //-script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/js/widgets/region-of-sales-select.js')
+
+mixin region_of_sales_select(classname, style_attrs)
+    input.region-of-sales-select-widget(class=classname, style=style_attrs, value=(typeof(pos) != 'undefined' ? pos.a48_code : ""))

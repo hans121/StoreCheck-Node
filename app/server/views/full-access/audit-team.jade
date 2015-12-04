@@ -1,0 +1,79 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/audit-team-form-fields
+    include ../widgets/audit-team-user-list
+    include ../modals/add-user
+    include ../modals/select-user
+
+    - function sortByName(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - unassigned_users = unassigned_users.sort(sortByName);
+    - team.members = team.members.sort(sortByName);
+
+    mixin navbar()
+    mixin add_user_dialog("add-new-user-dialog", "Add New User To Team")
+    mixin select_user_dialog("add-existing-user-dialog", "Add Existing User To Team", unassigned_users)
+    .container-fluid
+        mixin message_bar_container()
+        form( method="post", style="position: relative;")#audit-team-form.form-horizontal.well
+            h3 Edit Auditor Team
+            p.subheading Please provide details about the auditor team.
+            hr
+            mixin audit_team_form_fields(team, unassigned_users)
+            .form-actions(style="text-align:center")
+
+                    button(type='button', style="margin-right: 5px;margin-bottom:5px;").audit-team-add-existing-user.btn.btn-info Existing Users
+                    button(type='button', style="margin-bottom:5px;").audit-team-add-new-user.btn.btn-info Add New User
+
+                    button(type='button')#audit-team-form-btn-save.btn.btn-primary Save
+        mixin audit_team_user_list(team.members, true, true)
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/auditTeamController.js')
+    script(src='/js/controllers/userController.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script.
+        var uc, atc;
+        $(function() {
+            $('table').tablesorter( { sortList: [[0,0] ] });
+
+            validator = new AccountValidator();
+            uc = new UserController(validator);
+            uc.initUserCreate();
+
+            atc = new AuditTeamController("#{team._id}", uc);
+        });
+
+        function addUser(team_id, id) {
+            $('.add-existing-user-dialog').modal('hide');
+            atc.updateAuditTeamMembership(team_id, id, 'add', function() {
+                window.location.reload();
+            });
+        }
+
+        function removeUser(team_id, id) {
+            atc.updateAuditTeamMembership(team_id, id, 'remove', function() {
+                window.location.reload();
+            });
+        }
+
+        function deleteUser(id) {
+            uc.deleteUserWithConfirmation(id);
+        }
+
+        function activateUser(id) {
+            uc.activateUserWithConfirmation(id);
+        }
+
+        function deactivateUser(id) {
+            uc.deactivateUserWithConfirmation(id);
+        }

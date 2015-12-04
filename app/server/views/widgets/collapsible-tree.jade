@@ -1,0 +1,131 @@
+block content
+    style.
+        .tree {
+        }
+        .tree li {
+            list-style-type:none;
+            margin:0;
+            padding:5px 0 0 5px;
+            position:relative
+        }
+        .tree-trunk > li > ul {
+            margin-left: 10px;
+        }
+        .tree li::before, .tree li::after {
+            content:'';
+            left: 0;
+            position:absolute;
+            right:auto
+        }
+        .tree li::before {
+            border-left:1px solid #ccc;
+            bottom:50px;
+            height:100%;
+            top:0;
+            width:1px
+        }
+        .tree li::after {
+            border-top:1px solid #ccc;
+            height:20px;
+            top:16px;
+            width: 6px;
+        }
+        .tree li span {
+            -moz-border-radius:5px;
+            -webkit-border-radius:5px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            display:inline-block;
+            padding:0 8px;
+            text-decoration:none;
+            color:#555;
+            background-color:#fbfbfb;
+        }
+        .tree li.parent_li>span {
+            cursor:pointer
+        }
+        .tree>ul>li::before, .tree>ul>li::after {
+            border:0
+        }
+        .tree li:last-child::before {
+            height:17px
+        }
+        .tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+            background:#eee;
+            border:1px solid #94a0b4;
+            color:#000
+        }
+        .tree i {
+            color: #333;
+            padding-right: 4px;
+        }
+        .tree a {
+            color: #335;
+        }
+        .tree-controls .control-button {
+            padding: 4px;
+            color: #555;
+            text-shadow: -1px 1px 1px #999;
+            zoom: 1.25;
+        }
+        .tree ul {
+            margin-left: 15px;
+            -webkit-padding-start: 0;
+            padding-left: 0;
+        }
+        .tree ul.tree-trunk > li::before {
+            border-left: 1px dashed #ccc;
+            left: -7px;
+        }
+        .tree ul.tree-trunk > li::after {
+            border-top: 1px dashed #ccc;
+            width: 12px;
+            left: -7px;
+        }
+        ul.tree-trunk {
+            margin-left: 5px;
+        }
+
+mixin collapsible_tree(samples, question_id)
+    script(src='/vendor/tree-model.min.js')
+    script(src='/js/util/question-hierarchy-tree.js')
+    script(src='/js/widgets/collapsible-tree.js')
+    script.
+        $(function() {
+            if(samples.length > 0) {
+                var tree_root = collapsible_tree_control.init(samples);
+
+                var node_container = $('.node-container');
+                collapsible_tree_control.buildTree(node_container, function(question_id) { return window.location.pathname + '?questionId=' + question_id; }, tree_root.children[0], samples);
+                collapsible_tree_control.hideLeafNodes(node_container);
+                collapsible_tree_control.highlightQuestion(node_container, '!{question_id}');
+
+                $('button.tree-expand-all').click(function() {
+                    collapsible_tree_control.expandAll(node_container);
+                });
+                $('button.tree-contract-all').click(function() {
+                    collapsible_tree_control.hideLeafNodes(node_container);
+                });
+                $('button.tree-expand-defects').click(function() {
+                    collapsible_tree_control.expandOnlyDefects(node_container);
+                });
+                $('button.tree-expand-alerts').click(function() {
+                    collapsible_tree_control.expandOnlyAlerts(node_container);
+                });
+            }
+        });
+
+    .pull-right(style="margin-right: -5px;").tree-controls
+        button.btn.tree-expand-all.control-button(title="expand all")
+            i.icon-plus-sign(style="padding-left: 0;")
+        div(style="margin-top: 5px;")
+            button.btn.tree-contract-all.control-button(title="collapse all")
+                i.icon-minus-sign(style="padding-left: 0;")
+        div(style="margin-top: 5px;")
+            button.btn.tree-expand-alerts.control-button( title="show only alerts")
+                i.icon-exclamation-sign(style="padding-left: 0; color: #eeee00;")
+        div(style="margin-top: 5px;")
+            button.btn.tree-expand-defects.control-button(title="show only defects")
+                i.icon-remove-sign(style="padding-left: 0; color: #ee0000;")
+    .tree
+        .node-container(style="margin-right: 30px;")

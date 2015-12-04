@@ -1,0 +1,111 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../widgets/point-of-sale-select
+    include ../widgets/sample-type-table
+
+    - products = typeof(products) == 'undefined' ? [] : products;
+    - templates = typeof(templates) == 'undefined' ? [] : templates;
+    - sample_types = typeof(visit.mySc.sample_types) == 'undefined' ? [] : visit.mySc.sample_types;
+
+    //- sample_ids = [];
+    - sample_ids = []; //visit.samples.filter(function(sample) { return sample.id; });
+    - visit.samples.forEach(function(sample) {sample_ids.push(sample.id)});
+
+    - function posByCompanyNameAscending(a, b) { var as = a.company_name.toLowerCase(), bs = b.company_name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - pos_list = typeof(pos_list) == 'undefined' ? [] : pos_list;
+    - pos_list = pos_list.sort(posByCompanyNameAscending);
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .col-xs-6.col-sm-5.col-md-4(style="padding-left: 0;")
+            form.form-horizontal.well.pull-left(style="width: 100%;")
+                h3= visit.mySc.name + ' - Edit Visit'
+                hr
+                div
+                    #identifier-cg.control-group
+                        label.control-label(for='identifier-cg') Visit Name
+                        .controls(style="padding-top: 5px;")
+                            = visit.pos_name + ' ' + visit.date_of_visit
+                    //- Auditor field
+                    -if(!read_only)
+                        #date-of-visit-cg.control-group
+                            label.control-label(for='date-of-visit-cg') Date of Visit
+                            .controls
+                                div#date-of-visit.input-append.date.datepicker(data-date="", data-date-format="dd-M-yyyy")
+                                    input#date-of-visit-input(placeholder="dd-mmm-yyyy", style="width: 110px;", size="16", type="text", value=visit.date_of_visit)
+                                    span#date-of-visit-icon.add-on.calendar-add-on
+                                        i.icon-calendar
+                    -else
+                        #date-of-visit-cg.control-group
+                            label.control-label(for='date-of-visit-cg') Date of Visit
+                            .controls
+                                div(style="margin-top: 5px;")= visit.date_of_visit
+                    //- Auditor field
+                    -if(!read_only)
+                        #auditor-name-cg.control-group
+                            label.control-label(for='auditor-name-cg') Auditor Name
+                            .controls
+                                input#auditor-name-input(type='text', name='name', value=visit.auditor_name)
+                    -else
+                        #auditor-name-cg.control-group
+                            label.control-label(for='auditor-name-cg') Auditor Name
+                            .controls
+                                div(style="margin-top: 5px;")= visit.auditor_name
+                    //- POS field
+                    #point-of-sale-cg.control-group
+                        label.control-label(for='point-of-sale-cg') POS
+                        .controls(style="margin-top: 5px; overflow: visible;")= pos.company_name + ' (' + pos.address1 + ', ' + pos.city + ')'
+                    -if(caller.roles.indexOf('auditor') != -1 && visit.state == 'draft' && !read_only)
+                        .form-actions
+                            .pull-left
+                                //--if(!read_only)
+                                    button.btn.btn-warning.btn-close-visit Submit all samples
+                            .pull-right
+                                -if(!read_only)
+                                    button.btn.btn-primary.btn-update-visit Save
+            .clearfix
+                -if(caller.roles.indexOf('CBU') != -1 || caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1)
+                    .clearfix
+                    .pull-left
+                        button.btn.btn-warning.btn-export-samples Export samples
+        .col-xs-12.col-sm-7.col-md-8(style="padding-right: 0; padding-left: 0;")
+            h3.pull-left Samples
+            div.pull-right
+                -if(sample_ids.length > 0)
+                    a(href="/samples/" + sample_ids + "/view", style="color: #3366FF; cursor: pointer; text-shadow: none;").btn.btn-default
+                        i(data-placement="left", data-original-title="View these samples in a list", style="", class="icon-list ui-tooltip")
+            .clearfix
+            mixin sample_type_table(sample_types, products, visit)
+
+
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/visitController.js')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/vendor/jquery.placeholder.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var sampleDeleteId, visitId, vc;
+        $(function() {
+            $('input').placeholder();
+            $('.sample-type-table').tablesorter( {
+                sortList: [[0,0] ]
+            });
+
+            $('.datepicker').datepicker({format: 'dd-M-yyyy', changeYear: true, autoclose: true});
+
+            vc = new VisitController('#{visit._id}');
+            vc.init();
+            $('select.visit-point-of-sale').val('#{visit.pos_id}');
+            $('select.visit-product').val('#{visit.product_id}');
+        });

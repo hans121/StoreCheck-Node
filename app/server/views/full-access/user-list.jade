@@ -1,0 +1,77 @@
+
+//- This is the list of all users, with full editing capabilities on each
+
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    - isAdmin = caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1;
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Users
+            .help-me-widget.ui-tooltip(style="margin-top: 3px; vertical-align: top;", data-placement="bottom", title="Visible: " + visibility_text)
+                i.icon-question(style="margin-left: -1px;")
+            .pull-right
+                button.btn.btn-primary.btn-add-user(style='margin-bottom:5px;', onclick='window.location.href="/user/view/create";')
+                    i.icon-plus.icon-white.icon-inner
+                    |Add New=
+        div(style="width:100%;overflow-y:auto;")
+
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th(style='width:200px') Name
+                        - if(isAdmin)
+                            th Organizations
+                            th Active Organization
+                        th Username
+                        - if(isAdmin)
+                            th Role
+                        th Account Created
+                        th Status
+                        th(class="sorter-false filter-false", style='width:50px') Action
+                tbody
+                    - for (var i = 0; i < accts.length; i++)
+                        tr
+                            td= accts[i].name
+                            - if(isAdmin)
+                                td= ((typeof accts[i].org_names !== 'undefined') ? accts[i].org_names.join(): '')
+                                td= ((typeof accts[i].active_organization_name !== 'undefined' && accts[i].active_organization_name !== null) ? accts[i].active_organization_name : '')
+                            td= accts[i].user
+                            - if(isAdmin)
+                                td= accts[i].roles
+                            td= accts[i].date
+                            td= accts[i].state
+                            td
+                                div(align="right")
+                                    a(href="/user/view/" + accts[i]._id, style="color: #00aa00;")
+                                        i.icon-pencil
+                                    a(onclick="deleteUser(\"" + accts[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                        i.icon-trash
+        mixin table_pager()
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/userController.js')
+    script(src='/vendor/select2.min.js')
+    script.
+        var uc;
+        $(function($){
+            uc = new UserController();
+            uc.initUserList();
+
+            sortable_table.init('table');
+        });
+        function deleteUser(id) {
+            uc.deleteUserWithConfirmation(id);
+        }

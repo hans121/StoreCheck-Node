@@ -1,0 +1,42 @@
+// required variables to be passed by express:
+// - static_loads: list of static loads
+extends ../layout
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/single-input-modal
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Excipio Imports
+        table.table.table-bordered.table-striped.table-static-loads
+            thead
+                tr
+                    th Timestamp
+                    th Time (local)
+                    th Type
+                    th.filter-false.sorter-false
+            tbody
+                - each load in static_loads
+                    tr
+                        td= load.timestamp
+                        td= formatter.formatDateTime(parseInt(load.timestamp))
+                        td= load.type
+                        td
+                            div(align="right")
+        mixin table_pager()
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script.
+        var pc;
+        $(function($) {
+            pc = new PageController();
+            sortable_table.init('table.table-static-loads', [[0,1]]);
+        });

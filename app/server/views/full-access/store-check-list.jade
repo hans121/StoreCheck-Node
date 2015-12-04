@@ -1,0 +1,93 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/single-input-modal
+    include ../modals/loading
+
+    - function sortByName(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - active_store_checks = active_store_checks.sort(sortByName);
+    - closed_store_checks = closed_store_checks.sort(sortByName);
+
+    mixin single_input_modal("store-check-name-modal", "Enter Store Check Name", "Enter a name for the new store check", "Cancel", "Save", "text")
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .pull-left
+            h3 Store Checks
+        .pull-right
+            -if(access.hasAccess(caller.roles[0], 'store-check', 'c'))
+                button.btn.btn-primary(style='margin-bottom:5px; margin-left: 10px;', onclick='window.location.href="/store-check/view/create";')
+                    i.icon-plus.icon-white.icon-inner
+                    |Add New
+        .pull-right.store-check-select
+            span(style="width: 130px;")
+                select.storecheck-state-select
+                    option(value="active") Active
+                    option(value="closed") Closed
+        .clearfix
+        .active-storechecks-container(style="overflow-y:auto")
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th(class="sorter-text") Name
+                        th(class="sorter-shortDate", style='width:110px') Report Date
+                        th(style='width:80px') Assigned
+                        th(style='width:80px') Type
+                        th(style='width:100px')
+                tbody
+                    - for (var i = 0; i < active_store_checks.length; i++)
+                        tr
+                            td
+                                a(href="/store-check/view/" + active_store_checks[i]._id)=active_store_checks[i].name
+                            td= formatter.formatDate(active_store_checks[i].reportDate)
+                            td(style="text-align: center;")
+                                -if(active_store_checks[i].assignment_ids && active_store_checks[i].assignment_ids.length > 0)
+                                    i.icon-ok
+                            td= active_store_checks[i].type
+                            td
+                                div(align="right")
+                                    -if(!read_only)
+                                        a(href="/store-check/view/" + active_store_checks[i]._id, style="color: #00aa00;")
+                                            i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                        a.duplicate-storecheck-button(data-id=active_store_checks[i]._id.toHexString(), style="margin-left: 10px; cursor: pointer; color: #ffa500;")
+                                            i.icon-copy.ui-tooltip(data-placement="bottom", data-original-title="Duplicate")
+                                        -if(!active_store_checks[i].assignment_ids || active_store_checks[i].assignment_ids.length == 0)
+                                            a.deactivate-storecheck-button(data-id=active_store_checks[i]._id.toHexString(), style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                                i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Deactivate")
+                                            //-a.delete-storecheck-button(data-id=active_store_checks[i]._id.toHexString(), style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                                i.icon-trash.ui-tooltip(data-placement="bottom", data-original-title="Delete")
+                                    -else
+                                        a(href="/store-check/view/" + active_store_checks[i]._id, style="color: #00aa00;")
+                                            i.icon-search.ui-tooltip(data-placement="bottom", data-original-title="View")
+
+        div(style='display: none;').closed-storechecks-container
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th(class="sorter-text") Name
+                        th(class="sorter-shortDate", style='width:100px') Report Date
+                        th(style='width:80px') Type
+                        th(style='width:25px')
+                tbody
+                    - for (var i = 0; i < closed_store_checks.length; i++)
+                        tr
+                            td
+                                a(href="/store-check/view/" + closed_store_checks[i]._id)=closed_store_checks[i].name
+                            td= formatter.formatDate(closed_store_checks[i].reportDate)
+                            td= closed_store_checks[i].type
+                            td
+                                a(href="/store-check/view/" + closed_store_checks[i]._id, style="color: #00aa00;")
+                                    i.icon-search.ui-tooltip(data-placement="bottom", data-original-title="View")
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/storeCheckController.js')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js', type='text/javascript')
+    script(src='/js/pages/store-check-list.js')

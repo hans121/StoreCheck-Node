@@ -1,0 +1,183 @@
+
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    style.
+        .graph_title_text {
+            color: #333;
+        }
+        .graph-container {
+            color: #ddd;
+            box-shadow: 0px 1px 3px #666;
+            padding: 0;
+            background-color: #fff;
+        }
+        .map-container {
+            color: #ddd;
+            box-shadow: 0px 1px 3px #666;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+
+            width: 600px;
+            float: left;
+            margin: 5px;
+            overflow: hidden;
+        }
+        .global_defects_by_pos_map {
+            width: 570px;
+            height: 485px;
+            overflow: hidden;
+        }
+        .global_alerts_by_pos_map {
+            width: 570px;
+            height: 485px;
+            overflow: hidden;
+        }
+        .metrics-chart {
+            width: 450px;
+            height: 275px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .highcharts-container {
+            border-radius: 10px;
+        }
+        .jvectormap-zoomin, .jvectormap-zoomout {
+            height: 15px;
+            width: 15px;
+        }
+        .globe-container {
+            position: relative;
+            display: inline-block;
+        }
+        #cesiumContainer {
+            width: 800px; height: 555px; margin: 0; margin-top: 6px; padding: 0; overflow: hidden;
+        }
+        #info {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            color: white;
+            margin: 5px;
+            max-width: 300px;
+            font-size: 11px;
+        }
+        #info > .pos-info {
+            padding: 5px;
+            border: 2px solid #888;
+            background-color: #666;
+            border-radius: 10px;
+        }
+        td.pos-key {
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+    .container-fluid
+        br
+        .navigation-grid
+            table.navigation_grid.hidden-md.hidden-lg
+                thead
+                tbody
+                    tr(style="height: 20px;")
+                        td
+                            .well.home-button-container
+                                a(href="/store-checks/view", title="Store Check")
+                                    i(style="zoom:2; color: #555555;").icon-ok.icon-black
+                                    p Store Check Management
+                        td
+                            .well.home-button-container
+                                a(href="/samples/view", title="Release")
+                                    i(style="zoom:2; color: #555555;").icon-share.icon-black
+                                    p View & Release Results
+                        td
+                            .well.home-button-container
+                                a(href="/templates/view", title="Template")
+                                    i(style="zoom:2; color: #555555;").icon-list.icon-black
+                                    p Audit Grid Templates
+                        td
+                            .well.home-button-container
+                                a(href="/points-of-sale/view", title="Points of Sale")
+                                    i(style="zoom:2; color: #555555;").icon-map-marker.icon-black
+                                    p Points of Sale
+                        td
+                            .well.home-button-container
+                                a(href="/audit-teams/view", title="Auditor Teams")
+                                    i(style="zoom:2; color: #555555;").icon-group.icon-black
+                                    p Auditor Teams
+        .container-fluid
+            select.defect-type
+                option(value="defects", selected) Defects
+                option(value="alerts") Alerts
+            .select2-fix(style="display: inline;")
+                |From
+                select.defect-timeframe
+                    option(selected=true, value="") All time
+                    option(value=formatter.getUtcTimeString(moment().subtract('months', 1).utc())) 1 month prior
+                    option(value=formatter.getUtcTimeString(moment().subtract('months', 3).utc())) 1 quarter prior
+                    option(value=formatter.getUtcTimeString(moment().subtract('months', 6).utc())) 6 months prior
+                    option(value=formatter.getUtcTimeString(moment().subtract('years', 1).utc())) 1 year prior
+            .pull-left.clearfix
+                .pull-left
+                    .container-fluid(style="padding-left: 0;")
+                        .globe-container
+                            #cesiumContainer
+                            #info
+                    //-.map-container
+                        span.graph_title_text Defects By Location
+                        hr
+                        .global_defects_by_pos_map
+
+                .pull-left.graph-container.global_defects_by_item_chart.metrics-chart
+                .pull-left.graph-container.global_defects_by_product_chart.metrics-chart
+                .pull-left.graph-container.global_defects_by_pos_chart.metrics-chart
+                .pull-left.graph-container.global_defects_by_visit_chart.metrics-chart
+            //-
+                .alerts-container.clearfix
+                    h3(style="margin-top: 30px;") Alerts
+                        .select2-fix(style="display: inline;")
+                            |From
+                            select.alert-timeframe
+                                option(selected=true, value="") All time
+                                option(value=formatter.getUtcTimeString(moment().subtract('months', 1).utc())) 1 month prior
+                                option(value=formatter.getUtcTimeString(moment().subtract('months', 3).utc())) 1 quarter prior
+                                option(value=formatter.getUtcTimeString(moment().subtract('months', 6).utc())) 6 months prior
+                                option(value=formatter.getUtcTimeString(moment().subtract('years', 1).utc())) 1 year prior
+                    .pull-left
+                        .pull-left
+                            .map-container
+                                span.graph_title_text Alerts By Location
+                                hr
+                                .global_alerts_by_pos_map
+
+                        .pull-left.graph-container.global_alerts_by_item_chart.metrics-chart
+                        .pull-left.graph-container.global_alerts_by_product_chart.metrics-chart
+                        .pull-left.graph-container.global_alerts_by_pos_chart.metrics-chart
+                        .pull-left.graph-container.global_alerts_by_visit_chart.metrics-chart
+            div(style="margin-left: 15px; color: #333;")
+                |* "Most" charts are limited to the top 7 results
+
+
+block append scripts
+    link(rel='stylesheet', href='/vendor/cesium/widgets/widgets.css')
+    //-link(rel='stylesheet', href='/vendor/jvectormap/jquery-jvectormap-1.2.2.css')
+    script(src='/vendor/highcharts.js')
+    script(src='/js/charts/defects-by-type.js')
+    script(src='/js/charts/defects-by-point-of-sale.js')
+    script(src='/js/charts/defects-by-visit.js')
+    script(src='/js/charts/defects-by-point-of-sale-map.js')
+    script(src='/js/charts/defects-by-product.js')
+    script(src='/js/pages/reports.js')
+    script(src='/vendor/cesium/Cesium.js')
+    //-script(src='/vendor/jvectormap/jquery-jvectormap-1.2.2.min.js')

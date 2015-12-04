@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/temperature-settings
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container
+        mixin message_bar_container()
+        h3.pull-left Organization Settings
+        button.btn.btn-primary.save-temperature-setting.pull-right Save
+        .clearfix
+        form( method="post").organization-settings-form.form-horizontal.well
+            mixin temperature_settings('Temperature Settings')
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/organizationController.js')
+    script.
+        var oc, uc;
+        $(function() {
+            oc = new OrganizationController();
+            oc.setOrganizationId('#{organization._id}');
+
+            $('button.save-temperature-setting').click(function() {
+                temperature_settings.save('.temperature-settings-container');
+            });
+
+            temperature_settings.init('.temperature-settings-container', !{JSON.stringify(organization)});
+        });

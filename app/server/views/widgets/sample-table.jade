@@ -1,0 +1,33 @@
+include ../widgets/table-pager
+
+block content
+    mixin sample_table(samples_in, table_container_class, filter_container_class, role, controller)
+        table(width="100%", style="display: none; font-size: small;").table-striped.table-bordered.table
+            thead
+                tr
+                    th(style="width: 18px;")
+                        input.selectAll(type="checkbox")
+                    th(class="sorter-shortDate", style="width: 90px;") Visit Date
+                    th(class="filter-select") Store Check
+                    th(style="padding-right: 15px;") ID
+                    th POS
+                    th(class="filter-select") Product
+                    th Auditor
+                    th(class="sorter-shortDate", style="width: 100px;") Best Before
+                    th Batch
+                    th Factory
+                    th(class="filter-select", style="width: 70px;") Images
+                    th(class="filter-select", style="width: 75px;") Defects
+                    th Note
+                    th(class="filter-select") Status
+                    th(style="width: 20px;")
+                tbody
+        mixin table_pager()
+
+        script(src='/js/widgets/sample-table.js')
+        script.
+            $(function() {
+                var sample_ids = "!{typeof(samples_in) === undefined ? [] : samples_in}";
+
+                sample_table_control.init($("!{table_container_class}"), "!{role}", sample_ids);
+            });

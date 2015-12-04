@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Countries
+        div(style="width:100%;overflow: auto;")
+            table.table.table-bordered.table-striped.countries-table(style="display: none;")
+                thead
+                    tr
+                        th Name
+                        th Code
+                        th Short Form
+                        th Long Form
+                        th(style='width:25px')
+                tbody
+                    - for (var i = 0; i < items.length; i++)
+                        tr
+                            td
+                                a(href="/world/country/" + items[i].code)= items[i].name
+                            td= items[i].code
+                            td= items[i].short_form
+                            td= items[i].long_form
+                            td(style="text-align: right;")
+            mixin table_pager()
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script.
+        $(function() {
+            sortable_table.init('.countries-table');
+            $('.pager').css('position', '');
+            $('.countries-table').css('display', '');
+        });

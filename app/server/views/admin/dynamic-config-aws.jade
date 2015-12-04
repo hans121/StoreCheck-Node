@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container
+        h3 AWS Settings
+        form( method="post").form-horizontal.well
+            fieldset
+                .form-group
+                    .col-xs-12.col-md-6.col-lg-6(style="padding-bottom:5px;")
+                        label.control-label.col-sm-4 Access Key
+                        .col-sm-8
+                            input.form-control(type="text", value=config.AWSAccessKey).aws-key
+                    .col-xs-12.col-md-6.col-lg-6
+                        label.control-label.col-sm-4 Secret Key
+                        .col-sm-8
+                            input.form-control(type="text", value=config.AWSSecretKey).aws-secret-key
+                .form-group
+                    .col-xs-12.col-md-6.col-lg-6(style="padding-bottom:5px;")
+                        label.control-label.col-sm-4 Region
+                        .col-sm-8
+                            input.form-control(type="text", value=config.AWSS3Region).aws-region
+                    .col-xs-12.col-md-6.col-lg-6
+                        label.control-label.col-sm-4 URL Prefix
+                        .col-sm-8
+                            input.form-control(type="text", value=config.RootURL).aws-url-prefix
+                .form-actions
+                    .pull-right
+                        button(type='button').cancel-btn.btn.btn-warning Cancel
+                        button(type='button').save-dynamic-config-btn.btn.btn-primary Save
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/dynamic-config-aws-page.js')

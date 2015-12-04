@@ -1,0 +1,11 @@
+mixin image_dialog
+    .modal.fade#imageDialog
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(data-dismiss="modal",aria-hidden="true",type="button")
+                        i.icon.icon-white.icon-remove
+                    h3 Image
+                .modal-body.text-center(style="overflow-y: auto; max-height: 500px;")
+                    .full-size-image
+                        |Loading...

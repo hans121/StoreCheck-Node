@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    .container-fluid
+        .login-container
+            form( method="post", style="width: 338px;")#login-form.well
+                h1 Store Check
+                p.subheading Please sign in to your account
+                hr
+                label Username
+                div(style="margin-bottom: 5px;")
+                    input(type="text", name="user", id='user-tf', style="width: 100%;").required
+                label Password
+                div(style="margin-bottom: 5px;")
+                    input(type="password", name="pass", id='pass-tf', style="width: 100%;").required
+                .row-fluid(style="margin-top: 5px;")
+                    button(type="submit").btn.btn-primary
+                        i.icon-lock.icon-white(style="margin-right: 3px; padding-left: 3px;")
+                        | Sign in
+
+                    .pull-right
+                        label#remember-me.pull-right
+                            div
+                                |Remember Me
+                                input(type="checkbox", checked='checked', style="margin-left: 5px; margin-top: -3px")
+                            div
+                                a.forgot-password
+                                    |Forgot password
+                div.clear-fix
+
+    include modals/alert
+    include modals/lost-password
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/form-validators/loginValidator.js')
+    script(src='/js/form-validators/emailValidator.js')
+    script(src='/js/pages/login.js')
+    style.
+        .login-container {
+            position: absolute;
+            left: 50%;
+            margin-left: -188px;
+            top: 50%;
+            margin-top: -165px;
+        }

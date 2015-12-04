@@ -1,0 +1,17 @@
+//- valid input_types: "password",etc
+mixin single_input_modal(root_class, title, prompt, cancel_text, submit_text, input_type)
+    .modal-single-input.modal(style="width: auto;", class=root_class)
+        .modal-dialog
+            .modal-content
+                div.modal-header
+                    h3= title
+                div.modal-body
+                    -if(prompt.length > 0)
+                        p(style="color: #333;")= prompt
+                    -if(input_type == "textarea")
+                        textarea.span5.required(rows=3, style="width: 100%")
+                    else
+                        input(type=input_type, style="width: 100%").span5.required
+                div.modal-footer
+                    button(data-dismiss="modal").btn.btn-warning.btn-cancel= cancel_text
+                    button(type="submit").submit.btn.btn-primary= submit_text

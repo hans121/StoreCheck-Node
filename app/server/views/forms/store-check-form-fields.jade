@@ -1,0 +1,73 @@
+mixin storecheck_form_fields(teams, storecheck, read_only)
+    -hasStoreCheck = typeof(storecheck) != 'undefined'
+    fieldset
+        .form-group
+            label.control-label.col-sm-5 Name
+            .col-sm-7
+                -if(read_only)
+                    label.form-control= storecheck.name
+                -else
+                    input.form-control.store-check-name-tf(type="text", value=hasStoreCheck ? storecheck.name : '')
+        .form-group
+            label.control-label.col-sm-5 Type
+            .col-sm-7
+                -if(read_only)
+                    label.form-control= storecheck.type
+                -else
+                    select.form-control.store-check-type
+                        option(value="internal", selected=(hasStoreCheck ? storecheck.type == 'internal' : false)).store-check-option Internal
+                        option(value="external", selected=(hasStoreCheck ? storecheck.type == 'external' : true)).store-check-option External
+        .form-group
+            label.control-label.col-sm-5 Report Date
+            .col-sm-7
+                -if(read_only)
+                    .form-control(style="display: inline-block; padding-left: 0;")
+                        label.form-control.pull-left(style="width: auto; padding: 0;")= (storecheck.reportDate ? storecheck.reportDate : "")
+                        .ui-popover.help-me-widget.pull-left(style="vertical-align: top; padding: 0; z-index: 1040;", data-placement="bottom", title="Report Date Help", data-trigger="hover", data-html="true", data-content='This date is used to assign the store check to a period of reporting.')
+                            i.icon-question(style="margin-left: -1px;")
+                -else
+                    .input-append.date.datepicker.pull-left
+                        input.store-check-report-date-input(placeholder="dd-mmm-yyyy", size="16", type="text", value=hasStoreCheck ? storecheck.reportDate : "", style="min-width: 120px; max-width: 130px;")
+                        span.store-check-report-date-icon.add-on.calendar-add-on
+                            i.icon-calendar
+                    .ui-popover.help-me-widget.pull-left(style="vertical-align: top; padding: 0; z-index: 1040;", data-placement="bottom", title="Report Date Help", data-trigger="hover", data-html="true", data-content='Select a day of the period to which this store check belongs.<br>This date is used to assign the store check to a period of reporting.')
+                        i.icon-question(style="margin-left: -1px;")
+        .form-group
+            label.control-label.col-sm-5 Short Description
+            .col-sm-7
+                -if(read_only)
+                    label(style="padding-top: 5px; color: #0d277b; text-shadow: none; width: 100%; word-break: break-word;")= storecheck.notes
+                -else
+                    textarea.form-control.store-check-notes-text(rows="7")=(typeof(storecheck) != 'undefined' ? storecheck.notes : '')
+        //- TODO: remove nasty dependency on teams - make parameter of mixin
+        -if(typeof(teams) != 'undefined' && teams.length > 0)
+            .form-group
+                label.control-label.col-sm-5 Auditor Team
+                .col-sm-7
+                    //- TODO: remove nasty dependency on assignment - make parameter of mixin
+                    -if(read_only)
+                        -if(typeof(assignment) != 'undefined' && assignment != null)
+                            - each team in teams
+                                -if(assignment.team_id == team._id)
+                                    label.form-control= team.name
+                    -else
+                        select.form-control.store-check-audit-team
+                            option(value="")
+                            - for (var i = 0; i < teams.length; i++)
+                                option(value=teams[i]._id).store-check-team-option= teams[i].name
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/vendor/jquery.placeholder.min.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var scc;
+        $(function($){
+            $('input').placeholder();
+
+            var reportDate = "!{typeof(storecheck) != 'undefined' && storecheck != null ? storecheck.reportDate : ''}";
+            $('.datepicker').val(reportDate).datepicker({format: 'dd-M-yyyy', changeYear: true, autoclose: true});
+        });
+        function goToList(){
+            window.location.href="/store-checks/view";
+        };

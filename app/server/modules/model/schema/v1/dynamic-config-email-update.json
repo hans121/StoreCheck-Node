@@ -1,0 +1,36 @@
+{
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/dynamic-config/email",
+    "required":false,
+    "properties":{
+        "host": {
+            "type":"string",
+            "required":true
+        },
+        "password": {
+            "type":"string",
+            "required":true
+        },
+        "port": {
+            "type":"string",
+            "required":true
+        },
+        "sender": {
+            "type":"string",
+            "required":true
+        },
+        "ssl": {
+            "enum": [ "true", "false" ],
+            "required":true
+        },
+        "tls": {
+            "enum": [ "true", "false" ],
+            "required":true
+        },
+        "user": {
+            "type":"string",
+            "required":true
+        }
+    }
+}

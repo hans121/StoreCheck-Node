@@ -1,0 +1,267 @@
+include ../widgets/user-navbar-item
+
+block content
+    mixin navbar_menu_item(target_path, iconclass, text, extraStyle)
+        - if(typeof(path) != 'undefined' && path == target_path)
+            a(href=path, style="background-color: rgba(0, 102, 204, 0.6); border-radius: 5px 5px;")
+                i.icon-white.icon-inner(class=iconclass, style=extraStyle)
+                = text
+        -else
+            a(href=target_path)
+                i.icon-white.icon-inner(class=iconclass, style=extraStyle)
+                = text
+
+    mixin supervisor_navbar()
+        ul.nav.navbar-nav(style="margin-top: 4px;").visible-xs.visible-sm.hidden-md.hidden-lg
+            li
+                mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Check Management", "")
+            li
+                mixin navbar_menu_item("/visits/view", "icon-suitcase", "Visits", "")
+            li
+                mixin navbar_menu_item("/samples/view", "icon-share", "Results", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-gear.icon-white(style="margin-right: 5px;")
+                    | Setting
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "")
+                    li
+                        mixin navbar_menu_item("/users/view", "icon-group", "Auditors", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+        ul.nav.navbar-nav(style="margin-top: 4px;").hidden-sm.hidden-xs.visible-md.visible-lg
+            li
+                mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Check Management", "")
+            li
+                mixin navbar_menu_item("/visits/view", "icon-suitcase", "Visits", "")
+            li
+                mixin navbar_menu_item("/samples/view", "icon-share", "View Results", "")
+            li
+                mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "")
+            li
+                mixin navbar_menu_item("/users/view", "icon-group", "Auditors", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+            //-li
+            //-    mixin navbar_menu_item("/samples/view", "icon-th", "Review Grid", "")
+
+    mixin admin_navbar()
+        ul.nav.navbar-nav(style="margin-top: 4px;")
+            li
+                mixin navbar_menu_item("/home", "icon-home", "Home", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-hdd.icon-white(style="margin-right: 5px;")
+                    | Data
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/audit-assignments/view", "icon-group", "Assignments")
+                    li
+                        mixin navbar_menu_item("/organizations/view", "icon-globe", "Organizations", "")
+                    li
+                        mixin navbar_menu_item("/samples/view", "icon-list", "Samples", "")
+                    li
+                        mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Checks", "")
+                    li
+                        mixin navbar_menu_item("/audit-teams/view", "icon-group", "Teams")
+                    li
+                        mixin navbar_menu_item("/users/view", "icon-group", "Users", "")
+                    li
+                        mixin navbar_menu_item("/visits/view", "icon-suitcase", "Visits", "")
+                    hr
+                    li
+                        mixin navbar_menu_item("/administrative-areas/view", "icon-globe", "Administrative Areas")
+                    li
+                        mixin navbar_menu_item("/world/countries/view", "icon-globe", "Countries")
+                    li
+                        mixin navbar_menu_item("/customers/view", "icon-group", "Customers")
+                    li
+                        mixin navbar_menu_item("/customer-platforms/view", "icon-group", "Customer Platforms")
+                    li
+                        mixin navbar_menu_item("/factories/view", "icon-building", "Factories")
+                    li
+                        mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "")
+                    li
+                        mixin navbar_menu_item("/production-lines/view", "icon-building", "Production Lines")
+                    li
+                        mixin navbar_menu_item("/products/view", "icon-barcode", "Products", "")
+                    li
+                        mixin navbar_menu_item("/template/hierarchies/view", "icon-list", "Template Hierarchies", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-calendar.icon-white(style="margin-right: 5px;")
+                    | Activity
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/aws/images/view", "icon-camera", "AWS Uploads", "")
+                    li
+                        mixin navbar_menu_item("/excipio-exports/view", "icon-cloud-upload", "Excipio Exports", "")
+                    li
+                        mixin navbar_menu_item("/static-loads/view", "icon-cloud-download", "Excipio Imports")
+                    li
+                        mixin navbar_menu_item("/action-audits/view", "icon-eye-open", "History", "")
+                    li
+                        mixin navbar_menu_item("/logs/view", "icon-list", "Logs", "")
+                    li
+                        mixin navbar_menu_item("/response-times/view", "icon-time", "Response Times", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-cloud-upload.icon-white(style="margin-right: 5px;")
+                    | Export
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/excipio-export", "icon-group", "Mass Sample Export to Excipio", "")
+                    li
+                        mixin navbar_menu_item("/points-of-sale/geocode", "icon-map-marker", "Points of Sale Geo Data", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-wrench.icon-white(style="margin-right: 5px;")
+                    | Tools
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/excipio-export/view", "icon-file-text", "Excipio Export File Analyzer")
+                    li
+                        mixin navbar_menu_item("/pos/geocode/init", "icon-map-marker", "Geocode 50 addresses", "")
+                    li
+                        mixin navbar_menu_item("/system/resources/view", "icon-hdd", "System Resources", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-gear.icon-white(style="margin-right: 5px;")
+                    | Settings
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/dynamic-config/aws/view", "icon-cloud", "AWS Settings", "")
+                    li
+                        mixin navbar_menu_item("/dynamic-config/email/view", "icon-envelope", "Email Settings", "")
+                    li
+                        mixin navbar_menu_item("/dynamic-config/excipio-export/view", "icon-wrench", "Excipio Export Settings", "")
+                    li
+                        mixin navbar_menu_item("/dynamic-config/timed-jobs/view", "icon-time", "Timed Job Settings", "")
+                    //-li
+                        mixin navbar_menu_item("/dynamic-config/alert/view", "icon-bullhorn", "Alert Settings (TODO)", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+    mixin exec_navbar()
+        ul.nav.navbar-nav(style="margin-top: 4px;")
+            li
+                mixin navbar_menu_item("/home", "icon-home", "Home", "")
+            li.nav.navbar-widget(style="text-align: left; cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-hdd.icon-white(style="margin-right: 5px;")
+                    | Data
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer
+                    li
+                        mixin navbar_menu_item("/users/view", "icon-group", "Users", "")
+                    li
+                        mixin navbar_menu_item("/organizations/view", "icon-globe", "Organizations", "")
+                    li
+                        mixin navbar_menu_item("/audit-assignments/view", "icon-group", "Assignments")
+                    li
+                        mixin navbar_menu_item("/audit-teams/view", "icon-group", "Teams")
+                    li
+                        mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "")
+                    li
+                        mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Checks", "")
+                    hr
+                    li
+                        mixin navbar_menu_item("/world/countries/view", "icon-globe", "Countries")
+                    li
+                        mixin navbar_menu_item("/customers/view", "icon-group", "Customers")
+                    li
+                        mixin navbar_menu_item("/factories/view", "icon-building", "Factories")
+                    li
+                        mixin navbar_menu_item("/production-lines/view", "icon-building", "Production Lines")
+                    li
+                        mixin navbar_menu_item("/products/view", "icon-barcode", "Products", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+
+    mixin cbu_navbar()
+        ul.nav.navbar-nav(style="margin-top: 4px;")
+            li
+                mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Check Management", "")
+            li
+                mixin navbar_menu_item("/samples/view", "icon-share", "View & Release Results", "")
+            li.nav.navbar-widget(style="cursor: pointer;")
+                a.dropdown-toggle(data-toggle="dropdown")
+                    i.icon-gear.icon-white(style="margin-right: 5px;")
+                    | Settings
+                    i.icon-caret-down(style="margin-left: 5px;")
+                ul.dropdown-menu.dropdown-caret.dropdown-closer(style="text-align: left;")
+                    li
+                        mixin navbar_menu_item("/templates/view", "icon-list", "Audit Grid Templates", "")
+                    li
+                        mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "padding-right: 7px;")
+                    li
+                        mixin navbar_menu_item("/audit-teams/view", "icon-group", "Auditor Teams", "")
+                    li
+                        mixin navbar_menu_item("/organization/settings/view", "icon-globe", "CBU Settings", "")
+                    -if(typeof(caller.permissions) != 'undefined' && caller.permissions.reports)
+                        li
+                            mixin navbar_menu_item("/reports", "icon-list-alt", "Reports", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+
+    mixin auditor_navbar()
+        ul.nav.navbar-nav(style="margin-top: 4px;")
+            li
+                mixin navbar_menu_item("/store-checks/view", "icon-ok", "Store Checks", "")
+            li
+                mixin navbar_menu_item("/visits/view", "icon-suitcase", "Visits", "")
+            li.visible-xs.visible-sm.hidden-md.hidden-lg
+                mixin navbar_menu_item("/samples/view", "icon-list", "Samples", "")
+            li.hidden-sm.hidden-xs.visible-md.visible-lg
+                mixin navbar_menu_item("/samples/view", "icon-list", "Samples List", "")
+            li.visible-xs.visible-sm.hidden-md.hidden-lg
+                mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "POS", "")
+            li.hidden-sm.hidden-xs.visible-md.visible-lg
+                mixin navbar_menu_item("/points-of-sale/view", "icon-map-marker", "Points of Sale", "")
+            li.btn-logout.nav-logout
+                mixin navbar_menu_item("#", "icon-lock", "Sign Out", "")
+
+    mixin navbar()
+        .navbar.navbar-default.navbar-fixed-top(role="navigation")
+            .navbar-inner(style="padding-left: 5px;")
+                .hidden-xs
+                    .pull-left(style="margin-left: 10px; margin-top: 0; margin-right: 15px; min-height: 50px; border-right: 1px solid gray;")
+                        -if(typeof(caller) != 'undefined')
+                            mixin user_navbar_item()
+                .visible-xs
+                    .pull-left(style="margin-left: 10px; margin-top: 0; margin-right: 15px; min-height: 50px;")
+                        -if(typeof(caller) != 'undefined')
+                            mixin user_navbar_item()
+                .pull-right
+                    button.btn-logout.btn.btn-danger(style="margin-right: 5px; width: 130px; margin-top: 7px;")
+                        i.icon-lock.icon-white(style="margin-right: 5px; padding-left: 0;")
+                        | Sign Out
+                button.pull-left.navbar-toggle.visible-xs(type="button", data-toggle='collapse',data-target='.navbar-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                .navbar-collapse.collapse.text-center
+                    -if(typeof(caller) != 'undefined' && typeof(caller.roles) != 'undefined' && caller.roles.length > 0)
+                        -if(caller.roles[0] == 'admin')
+                            mixin admin_navbar()
+                        -if(caller.roles[0] == 'exec')
+                            mixin exec_navbar()
+                        - else if(caller.roles[0] == 'CBU')
+                            mixin cbu_navbar()
+                        - else if(caller.roles[0] == 'supervisor')
+                            mixin supervisor_navbar()
+                        - else if(caller.roles[0] == 'auditor')
+                            mixin auditor_navbar()
+        .clearfix
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/form-validators/accountValidator.js')
+    script(src='/js/widgets/navbar.js')
+

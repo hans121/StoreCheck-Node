@@ -1,0 +1,86 @@
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    - time_setting = ''
+    - database_compact_time = '';
+
+    - if(typeof(auto_import_config) != 'undefined'&& auto_import_config)
+        - if(typeof(auto_import_config.hour) != 'undefined') { time_setting += auto_import_config.hour; }
+        - if(typeof(auto_import_config.minute) != 'undefined') { time_setting += (':' + auto_import_config.minute); }
+
+    - if(typeof(auto_compact_databases_config) != 'undefined' && auto_compact_databases_config)
+        - if(typeof(auto_compact_databases_config.hour) != 'undefined') { database_compact_time += auto_compact_databases_config.hour; }
+        - if(typeof(auto_compact_databases_config.minute) != 'undefined') { database_compact_time += (':' + auto_compact_databases_config.minute); }
+
+    - database_backup_time = '';
+    - database_backup_active = false;
+    - if(typeof(auto_backup_databases_config) != 'undefined' && auto_backup_databases_config)
+        - if(typeof(auto_backup_databases_config.hour) != 'undefined') { database_backup_time += auto_backup_databases_config.hour; }
+        - if(typeof(auto_backup_databases_config.minute) != 'undefined') { database_backup_time += (':' + auto_backup_databases_config.minute); }
+        - if(auto_backup_databases_config.active) { database_backup_active = true; }
+
+    mixin navbar()
+    .container
+        h3 Auto-Import Hierarchies (Daily)
+        .well
+            input(type="checkbox", style="margin-right: 10px; ", checked=(auto_import_config && auto_import_config.active)).active
+            span(style="color: #fff;") Active
+            .clearfix
+            hr
+            .hidden.hierarchy-import-configured-time(data-time=time_setting)
+            label.pull-left Time (UTC)
+            div(style="max-width: 130px; margin-left: 20px;").pull-left
+                .input-group.bootstrap-timepicker
+                    input.input-sm.form-control.hierarchy-import-time-selection(type="text")
+                    span.input-group-addon
+                        i.icon-time
+            .clearfix
+        .clearfix
+        h3 Auto-Compact Databases (Daily)
+        .well
+            input(type="checkbox", style="margin-right: 10px; ", checked=(auto_compact_databases_config && auto_compact_databases_config.active)).auto-compact-active
+            span(style="color: #fff;") Active
+            .clearfix
+            hr
+            .hidden.database-compact-configured-time(data-time=database_compact_time)
+            label.pull-left Time (UTC)
+            div(style="max-width: 130px; margin-left: 20px;").pull-left
+                .input-group.bootstrap-timepicker
+                    input.input-sm.form-control.database-compact-time-selection(type="text")
+                    span.input-group-addon
+                        i.icon-time
+            .clearfix
+        .clearfix
+        h3 Auto-Backup Databases (Daily)
+        .well
+            input(type="checkbox", style="margin-right: 10px; ", checked=database_backup_active).auto-backup-active
+            span(style="color: #fff;") Active
+            .clearfix
+            hr
+            .hidden.database-backup-configured-time(data-time=database_backup_time)
+            label.pull-left Time (UTC)
+            div(style="max-width: 130px; margin-left: 20px;").pull-left
+                .input-group.bootstrap-timepicker
+                    input.input-sm.form-control.database-backup-time-selection(type="text")
+                    span.input-group-addon
+                        i.icon-time
+            .clearfix
+        .clearfix
+
+        button.save-dynamic-config-btn.btn.btn-primary.pull-right Save
+
+block append scripts
+    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap-timepicker.min.css')
+    script(src='/vendor/moment.min.js')
+    script(src='/vendor/bootstrap/bootstrap-timepicker.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/dynamic-config-timed-jobs.js')
+    style.
+        .bootstrap-timepicker-widget table td input {
+            width: 38px;
+        }

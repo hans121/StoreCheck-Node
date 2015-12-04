@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "id": "v1/store-check/update",
+    "title": "store-check-update",
+    "description": "a store-check update request body",
+    "required": true,
+    "properties": {
+        "name": {
+            "type": "string",
+            "required": true,
+            "minLength": 3
+        },
+        "reportDate": {
+            "type": "string",
+            "required": true
+        },
+        "notes": {
+            "type": "string",
+            "required": true
+        },
+        "last_update_time": {
+            "type": "string"
+        },
+        "creation_time": {
+            "type": "string"
+        },
+        "type": {
+            "enum": [ "internal", "external" ]
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}

@@ -1,0 +1,110 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    - function sortByName(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - auditors = auditors.sort(sortByName);
+    - supervisors = supervisors.sort(sortByName);
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        //-.help-me-widget.ui-tooltip(style="margin-top: 6px; vertical-align: top;", data-placement="bottom", title="You can view existing auditor accounts and create new ones.\n\nVisible: " + visibility_text)
+        //-    i.icon-question(style="margin-left: -1px;")
+        -if(access.hasAccess(role, 'auditor', 'l') || access.hasAccess(role, 'audit-team/auditor', 'l'))
+            h3 Auditor Accounts
+                .pull-right
+                    button.btn.btn-primary.btn-add-user(style='margin-bottom:5px;', onclick='window.location.href="/user/view/create";')
+                        i.icon-plus.icon-white.icon-inner
+                        |Add New
+            div.auditor-list-data-container
+                table.table.table-bordered.table-striped
+                    thead
+                        tr
+                            th(style='width:180px') Name
+                            th(style='width:200px') Username
+                            th(style='width:200px') Email
+                            -if(access.hasAccess(role, 'auditor', 'u') && access.hasAccess(role, 'auditor', 'd'))
+                                th(style='width:40px')
+                            else
+                                th(style='width:20px')
+                    tbody
+                        - for (var i = 0; i < auditors.length; i++)
+                            tr
+                                - if(access.hasAccess(role, 'auditor', 'r'))
+                                    td
+                                        a(href="/user/view/" + auditors[i]._id)= auditors[i].name
+                                else
+                                    td= auditors[i].name
+                                td= auditors[i].user
+                                td
+                                    a(href="mailto: " + auditors[i].email)= auditors[i].email
+                                td
+                                    div(align="right")
+                                        -if(access.hasAccess(role, 'auditor', 'r'))
+                                            a(href="/user/view/" + auditors[i]._id, style="color: #00aa00;")
+                                                i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                        -if(access.hasAccess(role, 'auditor', 'd') && auditors[i].state == 'active')
+                                            a(onclick="uc.deactivateUserWithConfirmation(\"" + auditors[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                                i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Deactivate")
+                                        -if(access.hasAccess(role, 'auditor', 'd') && auditors[i].state == 'inactive')
+                                            a(onclick="uc.activateUserWithConfirmation(\"" + auditors[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #00aa00;")
+                                                i.icon-play-sign.ui-tooltip(data-placement="bottom", data-original-title="Activate")
+                                        //-if(access.hasAccess(role, 'auditor', 'd'))
+                                            a(onclick="deleteUser(\"" + auditors[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                                i.icon-trash.ui-tooltip(data-placement="bottom", data-original-title="Delete")
+        -if(access.hasAccess(role, 'supervisor', 'l'))
+            h3 Supervisor Accounts
+            .supervisor-list-data-container(style='overflow-y:auto; max-height: 500px; min-height: 300px;')
+                table.table.table-bordered.table-striped
+                    thead
+                        tr
+                            th(style='width:180px') Name
+                                i.icon-chevron-down(style="margin-left: 5px;")
+                            th(style='width:200px') Username
+                            th(style='width:200px') Email
+                            -if(access.hasAccess(role, 'supervisor', 'u') && access.hasAccess(role, 'supervisor', 'd'))
+                                th(style='width:40px')
+                            else
+                                th(style='width:20px')
+                    tbody
+                        - for (var i = 0; i < supervisors.length; i++)
+                            tr
+                                - if(access.hasAccess(role, 'supervisor', 'r'))
+                                    td
+                                        a(href="/user/view/" + supervisors[i]._id)= supervisors[i].name
+                                else
+                                    td= supervisors[i].name
+                                td= supervisors[i].user
+                                td
+                                    a(href="mailto: " + supervisors[i].email)= supervisors[i].email
+                                td
+                                    div(align="right")
+                                        - if(access.hasAccess(role, 'supervisor', 'r'))
+                                            a(href="/user/view/" + supervisors[i]._id, style="color: #00aa00;")
+                                                i.icon-pencil
+                                        - if(access.hasAccess(role, 'supervisor', 'd'))
+                                            a(onclick="deleteUser(\"" + supervisors[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                                i.icon-remove
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/userController.js')
+    script(src='/js/form-validators/accountValidator.js')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script.
+        var uc;
+        $(function($){
+            uc = new UserController();
+            $('table').tablesorter( { sortList: [[0,0] ] });
+        });
+        function deleteUser(id) {
+            uc.deleteUserWithConfirmation(id);
+        }

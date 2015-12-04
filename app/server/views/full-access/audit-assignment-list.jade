@@ -1,0 +1,61 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .pull-left
+            h3 Auditor Team Assignments
+        .pull-right
+            button.btn.btn-primary(style='margin-bottom:5px;', onclick='window.location.href="/audit-assignment/view/create"')
+                i.icon-plus.icon-white.icon-inner
+                |Assign
+        .clearfix
+        div(style='overflow-y:auto;')
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th Team
+                        th Store Check
+                        th(class="sorter-shortDate", style='width:160px') Assignment Date
+                        th(style='width:55px') Active
+                        th(style='width:50px')
+                        tbody
+                            - each assignment in assignments
+                                tr
+                                    td
+                                        a(href="/audit-team/view/" + assignment.team_id)= assignment.team_name
+                                    td
+                                        a(href="/store-check/view/" + assignment.storecheck_id)= assignment.storecheck_name
+                                    td= formatter.formatDate(assignment.assignment_time)
+                                    td(style="text-align: center")
+                                        -if(assignment.state == 'active')
+                                            i.icon-ok
+                                    td(style="width: 50px;")
+                                        div(align="right")
+                                            a(onclick="atc.deactivateAssignment(\"" + assignment._id + "\");", style="cursor: pointer; color: #aa0000;")
+                                                i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Deactivate")
+                                            a(onclick="atc.deleteAssignment(\"" + assignment._id + "\");", style="margin-left: 8px; cursor: pointer; color: #aa0000;")
+                                                i.icon-trash.ui-tooltip(data-placement="bottom", data-original-title="Delete")
+            mixin table_pager()
+        .pager-mobile
+            mixin table_pager()
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/auditTeamController.js')
+    script.
+        var atc;
+        $(function() {
+            atc = new AuditTeamController();
+            sortable_table.init('table', [[2,1]]);
+        });

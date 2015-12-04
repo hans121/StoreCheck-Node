@@ -1,0 +1,61 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/storecheck-select
+    include ../widgets/auditor-select
+    include ../widgets/product-select
+    include ../modals/alert
+    include ../modals/loading
+
+    style.
+        .filter-container {
+            max-width: 380px;
+            margin-bottom: 10px;
+        }
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left Samples Report
+        .clearfix
+        .flex-wrap
+            .filter-container(style="margin-right: 5px;")
+                +storecheck_select("sc-select", "min-width: 250px;")
+            .filter-container(style="width: 215px; margin-right: 5px;")
+                select.weight
+                    option
+                    option(value="CONFORM") Conform(A)
+                    option(value="ALERT") Alert(B)
+                    option(value="NON-CONFORM") Non-conform(C)
+                    option(value="ALERT,NON-CONFORM") Alert/Non-conform(B/C)
+            .filter-container(style="width: 170px; margin-right: 5px;")
+                select.state
+                    option
+                    option(value="draft") Draft
+                    option(value="validated") Validated
+                    option(value="submitted") Submitted
+                    option(value="to-be-corrected") To-Be-Corrected
+                    option(value="released") Released
+            .filter-container(style="margin-right: 5px;")
+                +auditor_select("auditor-select", "min-width: 250px;")
+            .filter-container(style="margin-right: 5px;")
+                +product_select("product-select", "min-width: 250px;")
+            .parameter-select-container
+        .report-sample-count-container.pull-left(style="margin-top: 5px;")
+        .export-container.pull-right
+            button.btn.btn-sm.btn-info.button-export-report.hidden Export
+        .clearfix
+        div(style="background-color: #fff; padding: 20px; margin-top: 10px; display: none;")
+            .reports-container
+        .flot-tooltip(style="position: absolute; border: 1px solid rgb(255, 221, 221); padding: 2px; background-color: rgb(255, 238, 238); opacity: 0.8; top: 290px; left: 517px; display: none;")
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/vendor/html2canvas.min.js')
+    script(src='/vendor/jquery.flot.min.js')
+    script(src='/vendor/jquery.flot.barnumbers.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/samples-report.js')

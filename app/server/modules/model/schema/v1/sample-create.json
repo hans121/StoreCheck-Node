@@ -1,0 +1,45 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/sample/create",
+    "title": "sample-create",
+    "description": "a sample create request body",
+    "required": true,
+    "properties": {
+        "visit_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "product_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "template_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "batch_code": {
+            "type": "string",
+            "required": false
+        },
+        "best_by_date": {
+            "type": "string",
+            "required": false
+        },
+        "name": {
+            "type": "string",
+            "required": false
+        },
+        "factory_id": {
+            "type": "string",
+            "required": false
+        },
+        "production_line_id": {
+            "type": "string",
+            "required": false
+        }
+    }
+}

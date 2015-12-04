@@ -1,0 +1,20 @@
+include ../forms/user-form-fields
+
+mixin add_user_dialog(root_class, header_text)
+    .modal(class=root_class, style="max-width: 400px; overflow: visible; margin: auto; min-height: 300px; max-height: 500px;")
+        .modal-content
+            .modal-header
+                button.close(data-dismiss='modal', style="color: white;")
+                    i.icon-remove
+                h3= header_text
+            .modal-body(style="overflow-x: visible; overflow-y: auto; ")
+                .container-fluid
+                form#account-form.form-horizontal.well(style="margin-bottom: 0;")
+                    mixin user_form_fields()
+            .modal-footer
+                button(data-dismiss="modal").cancel.btn.btn-warning Cancel
+                button.submit.btn.btn-primary Save
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/select2.min.js', type='text/javascript')

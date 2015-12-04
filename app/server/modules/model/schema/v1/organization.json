@@ -1,0 +1,44 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/organization",
+    "title": "organization",
+    "description": "Organization to which template, store checks, audit-grids, auditor teams, and auditors belong",
+    "required": true,
+    "properties": {
+        "_id": {
+            "type": "string",
+            "required": "true"
+        },
+        "creation_time": {
+            "type": "string",
+            "required": true
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "minLength": 1
+        },
+        "type": {
+            "type": "string",
+            "required": true,
+            "minLength": 1
+        },
+        "children": {
+            "type": "array",
+            "required": true,
+            "items": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            }
+        },
+        "version": {
+            "type": "string",
+            "required": true
+        }
+    }
+}

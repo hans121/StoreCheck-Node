@@ -1,0 +1,67 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h1= country.name
+        h3 States/Provinces
+        div(style="overflow: auto;")
+            table.table.table-bordered.table-striped.countries-table(style="display: none;")
+                thead
+                    tr
+                        th Name
+                        th Type
+                        th(style='width:25px')
+                tbody
+                    - for (var i = 0; i < items.length; i++)
+                        tr
+                            td= items[i].name
+                            td= items[i].type
+                            td(style="text-align: right;")
+            mixin table_pager()
+
+block append scripts
+    link(type='text/css', href='/vendor/css/tablesorter.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js', type='text/javascript')
+    script(src='/vendor/tablesorter/jquery.tablesorter.widgets.min.js', type='text/javascript')
+    script(src='/vendor/tablesorter/jquery.tablesorter.pager.min.js', type='text/javascript')
+    script.
+        $(function() {
+            $('table').tablesorter( {sortList: [[0,0] ],
+
+                widgets: ["filter"],
+                widgetOptions : {
+                  filter_childRows : false,
+                  filter_columnFilters : true,
+                  filter_cssFilter : '',
+                  filter_filteredRow   : 'filtered',
+                  filter_formatter : null,
+                  filter_functions : null,
+                  filter_hideFilters : true,
+                  filter_ignoreCase : true,
+                  filter_liveSearch : true,
+                  filter_reset : 'button.reset',
+                  filter_searchDelay : 300,
+                  filter_serversideFiltering: false,
+                  filter_startsWith : false,
+                  filter_useParsedData : false
+                }
+
+            }).tablesorterPager({
+                container: $(".pager"),
+                savePages: false,
+                size: 15
+            });
+
+            $('.pager').css('position', '');
+            $('.countries-table').css('display', '');
+        });

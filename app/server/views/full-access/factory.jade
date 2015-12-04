@@ -1,0 +1,110 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .well
+            h3 View Factory
+            hr
+            body
+                .flex-wrap
+                    .pad-some.col-xs-12.col-md-2
+                        label Company ID
+                        = factory.company_id
+                    .pad-some.col-xs-12.col-md-2
+                        label Code
+                        = factory.code
+                    .pad-some.col-xs-12.col-md-2
+                        label Hierarchy Level
+                        = factory.hierarchy_level
+                    .pad-some.col-xs-12.col-md-2
+                        label Display Sequence
+                        = factory.display_sequence
+                    .pad-some.col-xs-12.col-md-2
+                        label Active
+                        = factory.active
+                    .pad-some.col-xs-12.col-md-2
+                        label Full Case Required
+                        = factory.full_case_required
+                    .pad-some.col-xs-12.col-md-2
+                        label Subcategory Code
+                        = factory.subcategory_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Group Code
+                        = factory.group_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Subgroup Code
+                        = factory.subgroup_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Section Code
+                        = factory.section_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Subsection Code
+                        = factory.subsection_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Category-Specific
+                        = factory.category_specific
+                    .pad-some.col-xs-12.col-md-2
+                        label Description1
+                        = factory.description1
+                    .pad-some.col-xs-12.col-md-2
+                        label Description2
+                        = factory.description2
+                    .pad-some.col-xs-12.col-md-2
+                        label Description3
+                        = factory.description3
+                    .pad-some.col-xs-12.col-md-2
+                        label Active Start Date
+                        = factory.active_start_date
+                    .pad-some.col-xs-12.col-md-2
+                        label Active End Date
+                        = factory.active_end_date
+                    .pad-some.col-xs-12.col-md-2
+                        label Date Added
+                        = factory.date_added
+                    .pad-some.col-xs-12.col-md-2
+                        label Added By User Code
+                        = factory.added_by_user_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Date Changed
+                        = factory.date_changed
+                    .pad-some.col-xs-12.col-md-2
+                        label Changed By User Code
+                        = factory.changed_by_user_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Alert Infocenter Code
+                        = factory.alert_infocenter_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Infocenter Code
+                        = factory.infocenter_code
+                    .pad-some.col-xs-12.col-md-2
+                        label Text Search
+                        = factory.text_search
+                    .pad-some.col-xs-12.col-md-2
+                        label Identity ID
+                        = factory.identity_id
+                    .pad-some.col-xs-12.col-md-2
+                        label Schema Version
+                        = factory.version
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script.
+        var pc;
+        $(function($){
+            pc = new PageController();
+        });
+    style.
+        .pad-some {
+            background-color: #999;
+            border-radius: 5px;
+            margin: 3px;
+            padding: 5px;
+        }

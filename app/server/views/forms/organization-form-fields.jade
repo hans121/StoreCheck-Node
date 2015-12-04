@@ -1,0 +1,40 @@
+mixin organization_form_fields(org, templates)
+
+    - organization_name = "";
+    - organization_code = "";
+    - organization_state = "active";
+    - template_settings = undefined;
+    - if(typeof(org) !== 'undefined')
+        - organization_name = org.name;
+        - organization_code = org.code;
+        - organization_state = org.state;
+        - if(typeof(org.settings) != 'undefined')
+            - if(typeof(org.settings.templates) != 'undefined')
+                -template_settings = org.settings.templates;
+
+    fieldset
+        .form-group
+            label.control-label.col-sm-2 Name
+            .col-sm-4
+                input.form-control.organization-name-input(type='text', name='name', value=organization_name)
+            label.control-label.col-sm-2 Code
+            .col-sm-4
+                - if(organization_code)
+                    input.form-control.organization-code-input(type='text', readonly='readonly', name='code', value=organization_code)
+                - else
+                    input.form-control.organization-code-input(type='text', name='code', value=organization_code)
+        .form-group
+            label.control-label.col-sm-2 Active
+            .col-sm-4
+                input.form-control.organization-active-input(type='checkbox', name='active', checked=(organization_state == "active"))
+        -if(typeof(templates) != 'undefined')
+            hr
+            h5 Available Templates
+            .form-group
+                label.control-label.col-sm-2 Available Templates
+                .col-sm-10
+                    .form-control
+                        -each template in templates
+                            -checked = (typeof(template_settings) != 'undefined' && template_settings.indexOf(template) != -1)
+                            input.template-radio(type='checkbox', name='min_non_conform', value=template, checked=checked)
+                            span(style="color: white; padding-left: 5px; padding-right: 10px;")=template

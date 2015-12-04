@@ -1,0 +1,125 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/product-samples
+    include ../modals/loading
+    include ../modals/single-input-modal
+    include ../forms/store-check-form-fields
+
+    - used_products = typeof(used_products) == 'undefined' ? [] : used_products;
+    - products = typeof(products) == 'undefined' ? [] : products;
+    - templates = typeof(templates) == 'undefined' ? [] : templates;
+    - sample_types = typeof(storecheck.sample_types) == 'undefined' ? [] : storecheck.sample_types;
+    - active_templates = []
+    - each template in templates
+        - if(template.state == 'active')
+            -active_templates.push(template)
+
+    mixin product_samples_dialog(products, active_templates)
+    mixin navbar()
+
+    div
+        mixin single_input_modal("sales-volume-modal", "Enter Sales Volume", "Enter the sales volume of this product", "Cancel", "Save", "text")
+        .container-fluid
+            mixin message_bar_container()
+        .col-lg-4.col-md-5.col-sm-7.col-xs-12.col
+            form( method="post").form-horizontal.well.form-storecheck
+                -if(read_only)
+                    h3 View Store Check
+                -else
+                    h3 Edit Store Check
+                    p.subheading Please provide details about the store check.
+                hr
+                mixin storecheck_form_fields(teams, storecheck, read_only)
+                -if(!read_only)
+                    .form-actions
+                        .pull-right
+                            button(type='button', onclick='goToList();')#store-check-form-btn-cancel.btn.btn-warning Cancel
+                            button(type='button')#store-check-form-btn-save.btn.btn-primary Save
+            -if(!read_only)
+                button.btn.btn-warning.span4.close-store-check-btn(style="margin-left: 0;") Archive Completed Store Check
+            -if((caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1) && storecheck.state == 'closed')
+                button.btn.btn-warning.span4.reopen-store-check-btn(style="margin-left: 0;") Re-open Archived Store Check
+            -if(caller.roles.indexOf('CBU') != -1 || caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1)
+                button.btn.btn-warning.btn-export-samples Export samples
+        .col-lg-8.col-md-7.col-sm-12.col
+            h3 Associated Products/SKUs
+                -if(!read_only && active_templates.length > 0)
+                    .pull-right
+                        -if(templates.length > 0 && products.length > 0)
+                            button.btn.btn-info.add-sample-type-button.pull-right Add New Product/SKU
+            div
+                -if(active_templates.length == 0)
+                    div= "This store check can't find active templates that are relevant"
+                -if(products.length == 0)
+                    div= "This store check can't find products that are relevant"
+                table.table.table-bordered.table-striped
+                    thead
+                        tr
+                            th Audit Grid Template
+                            th Product/SKU
+                            -if(caller.roles.indexOf('auditor') == -1)
+                                th Sales Volume
+                            -if(!read_only)
+                                th(style='width:50px')
+                            -else
+                                th(style='width:25px')
+                    tbody
+                        - for (var i = 0; i < sample_types.length; i++)
+                            - row_template = null;
+                            - each template in templates
+                                -if(template._id == sample_types[i].template_id)
+                                    -row_template = template;
+
+                            - row_product = null;
+                            - each product in used_products
+                                -if(product._id == sample_types[i].product_id)
+                                    -row_product = product;
+
+                            tr
+                                td
+                                    -if(row_template != null)
+                                        -if(read_only)
+                                            =row_template.name
+                                        -else
+                                            a(href="/template/view/" + row_template._id)= row_template.name
+                                td
+                                    -if(row_product != null)
+                                        a(href="/store-check/" + storecheck._id + "/product/" + row_product._id + "/samples/view")= row_product.description3
+                                -if(caller.roles.indexOf('auditor') == -1)
+                                    -if(!read_only)
+                                        td
+                                            -if(typeof(sample_types[i].sales_volume) != 'undefined')
+                                                span(style="margin-right: 10px;")= sample_types[i].sales_volume
+                                            a.btn-edit-sales-volume(data-sample-index=i, style="color: #00aa00; cursor: pointer;")
+                                                i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                    -else
+                                        td View
+
+                                td(style="text-align: right;")
+                                    -if(row_template != null && row_product != null)
+                                        a(onclick='scc.exportSampleType("' + row_template._id + '","' + row_product._id + '");',style="color: #00aa00; cursor: pointer; margin-right: 8px;").export-sample-type
+                                            i.icon-share.ui-tooltip(data-placement="bottom", data-original-title="Export")
+                                    -if(!read_only)
+                                        a(onclick="scc.removeSampleType(" + i + ");", style="color: #aa0000; cursor: pointer;")
+                                            i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Remove")
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js', type='text/javascript')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/storeCheckController.js')
+    script(src='/vendor/select2.min.js')
+    script.
+        var scc;
+        $(function($){
+            $('table').tablesorter( {sortList: [[0,0], [1,0] ]} );
+
+            var assigned_team_id = "#{typeof(assignment) != 'undefined' && assignment != null ? assignment.team_id : ""}";
+            scc = new StoreCheckController("#{storecheck._id}", assigned_team_id);
+            $('select.store-check-audit-team').val(assigned_team_id)
+        });

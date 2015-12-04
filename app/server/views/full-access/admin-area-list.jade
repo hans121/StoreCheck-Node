@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Administrative Areas
+        div(style="width:100%;overflow-y:auto;")
+            .table-container
+
+block append scripts
+    script(src='/js/widgets/table-pager.js')
+    script(src='/js/widgets/admin-area-table.js')
+    script.
+        $(function() {
+            admin_area_table.init($('.table-container'));
+        });

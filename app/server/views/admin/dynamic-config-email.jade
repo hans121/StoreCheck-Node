@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container
+        .col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+            h3 Email-Sending Settings
+            form( method="post").form-horizontal.well
+                fieldset
+                    .control-group
+                        label.control-label Sender
+                        .controls(style="overflow: hidden;")
+                            input(style="width: 100%; padding: 5px;", value=config.sender).input-sender
+                    .control-group
+                        label.control-label Host
+                        .controls(style="overflow: hidden;")
+                            input(style="width: 100%; padding: 5px;", value=config.host).input-host
+                    .control-group
+                        label.control-label User
+                        .controls(style="overflow: hidden;")
+                            input(style="width: 100%; padding: 5px;", value=config.user).input-user
+                    .control-group
+                        label.control-label Password
+                        .controls(style="overflow: hidden;")
+                            input(type="password", style="width: 100%; padding: 5px;", value=config.password).input-password
+                    .control-group
+                        label.control-label Use SSL
+                        .controls
+                            input(type="checkbox", checked=config.ssl).check-ssl
+                    .control-group
+                        label.control-label Use TLS
+                        .controls
+                            input(type="checkbox", checked=config.tls).check-tls
+                    .control-group
+                        label.control-label Port
+                        .controls(style="overflow: hidden;")
+                            input(style="width: 100%; padding: 5px;", value=config.port).input-port
+                .form-actions
+                    .pull-right
+                        button(type='button').cancel-btn.btn.btn-warning Cancel
+                        button(type='button').save-dynamic-config-btn.btn.btn-primary Save
+            .clearfix
+            button.btn.btn-primary.btn-send-test-email.pull-right Send Test Email With Saved Configuration
+            .clearfix
+
+block append scripts
+    script(src='/vendor/moment.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/dynamic-config-email-page.js')

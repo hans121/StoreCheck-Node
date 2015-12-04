@@ -1,0 +1,199 @@
+include ../widgets/admin-area-select
+include ../widgets/country-select
+include ../widgets/state-select
+include ../widgets/customer-select
+include ../widgets/customer-platform-select
+include ../widgets/danone-platform-select
+include ../widgets/region-of-sales-select
+
+//- usage:
+//-     - include this file in the jade file that uses it
+//-     - add the mixin to the correct spot
+//-     - call point_of_sale_form.init(<controller>) with a page controller
+//-     - get the pos value with the point of sale controller
+mixin pos_form_fields(pos, read_only)
+    - hasPos = (typeof(pos) != 'undefined');
+        .form-group
+            label.control-label.col-sm-2 Company Name
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.company_name : "")
+                -else
+                    input(type="text", value=(hasPos ? pos.company_name : "")).input-company-name.form-control
+        .form-group
+            label.control-label.col-sm-2 Address Line 1
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.address1 : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.address1 : "")).input-address-1
+
+            label.control-label.col-sm-2(style="") Address Line 2
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.address2 : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.address2 : "")).input-address-2
+        .form-group
+            label.control-label.col-sm-2(style="") Country
+            .col-sm-4(style="")
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.country : "")
+                -else
+                    span.form-control.select2-field
+                        mixin country_select("country-select", "min-width: 210px;")
+
+            label.control-label.col-sm-2(style="") State
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.state : "")
+                -else
+                    span.form-control.select2-field
+                        mixin state_select("state-select", "min-width: 210px;")
+        .form-group
+            label.control-label.col-sm-2(style="") City
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.city : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.city : "")).input-city
+
+            label.control-label.col-sm-2(style="") Postal Code
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.postal_codetate : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.postal_code : "")).input-postal-code
+        .form-group
+            label.control-label.col-sm-2 Address Type
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.address_type_code : "")
+                -else
+                    span.form-control.select2-field
+                        select.address-type
+                            option
+                            option(selected=(hasPos && pos.address_type_code == 'CONSUMER'), value='CONSUMER') CONSUMER
+                            option(selected=(!hasPos || pos.address_type_code == 'RETAILER'), value='RETAILER') RETAILER
+        .form-group
+            label.control-label.col-sm-2(style="") Email
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.email : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.email : "")).input-email
+
+            label.control-label.col-sm-2(style="") Account Number
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.account_number : "")
+                -else
+                    input.form-control(type="text", value=(hasPos ? pos.account_number : "")).input-account-number
+        .form-group
+            label.control-label.col-sm-2(style="") Distribution Channel
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a50_code : "")
+                -else
+                    span.form-control.select2-field
+                        select.distribution_channel.form-control
+                            option
+                            option(selected=(hasPos && pos.a50_code == 'Modern Trade'), value='Modern Trade') Modern Trade
+                            option(selected=(hasPos && pos.a50_code == 'Traditional Trade'), value='Traditional Trade') Traditional Trade
+                            option(selected=(hasPos && pos.a50_code == 'Convenience'), value='Convenience') Convenience
+                            option(selected=(hasPos && pos.a50_code == 'Drive'), value='Drive') Drive
+            label.control-label.col-sm-2(style="") Administrative Area
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a53_code : "")
+                -else
+                    span.form-control.select2-field
+                        mixin admin_area_select("admin-area-select", "min-width: 210px;")
+        .form-group
+            label.control-label.col-sm-2(style="") Customer
+            .col-sm-4(style="")
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a59_code : "")
+                -else
+                    span.form-control.select2-field
+                        mixin customer_select("customer-select", "min-width: 210px;")
+            label.control-label.col-sm-2(style="") Region of Sales
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a48_code : "")
+                -else
+                    span.form-control.select2-field
+                        mixin region_of_sales_select("region-of-sales-select", "min-width: 210px;")
+        .form-group
+            label.control-label.col-sm-2(style="") Store Check Candidate
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a47_code : "")
+                -else
+                    span.form-control.select2-field
+                        select.storecheck_candidate.form-control
+                            option
+                            option(selected=((hasPos && pos.a47_code == 'Yes') || !hasPos), value='Yes') Yes
+                            option(selected=(hasPos && pos.a47_code == 'No'), value='No') No
+            label.control-label.col-sm-2(style="") Preparation Type
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a54_code : "")
+                -else
+                    span.form-control.select2-field
+                        select.preparation_type.form-control
+                            option
+                            option(selected=(hasPos && pos.a54_code == 'Cross dock'), value='Cross dock') Cross dock
+                            option(selected=(hasPos && pos.a54_code == 'Pull'), value='Pull') Pull
+                            option(selected=(hasPos && pos.a54_code == 'Push'), value='Push') Push
+        .form-group
+            label.control-label.col-sm-2(style="") Customer Platform
+            .col-sm-4(style="")
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a57_code : "")
+                -else
+                    span.form-control.select2-field
+                        mixin customer_platform_select("customer-platform-select", "min-width: 210px;")
+            label.control-label.col-sm-2(style="") Danone Platform
+            .col-sm-4(style="")
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a52_code : "")
+                -else
+                    span.form-control.select2-field
+                        mixin danone_platform_select("danone-platform-select", "min-width: 210px;")
+        .form-group
+            label.control-label.col-sm-2(style="") Lat/Long
+            .col-sm-4(style="padding-top: 5px;")
+                -if(hasPos && typeof(pos.latitude) != 'undefined')
+                    a(href="https://maps.google.com/maps?q=" + pos.latitude + "," + pos.longitude, target="_blank", style="margin-right: 8px;")= pos.latitude + "°, " + pos.longitude + "°"
+                -else
+                    span.geocode_container
+                -if(!read_only)
+                    -if(hasPos)
+                        a(onclick='point_of_sale_form.getGeoForPOS("' + pos._id + '")', style="color: #00dd00; margin-right: 8px; text-shadow: 0 0 3px #333; cursor: pointer;")
+                            i.icon-globe.ui-tooltip(data-placement="bottom", data-original-title="Get location from Google")
+                    -else
+                        a(onclick='point_of_sale_form.getGeoForPOSData()', style="color: #00dd00; margin-right: 8px; text-shadow: 0 0 3px #333; cursor: pointer;")
+                            i.icon-globe.ui-tooltip(data-placement="bottom", data-original-title="Get location from Google")
+                    -if(hasPos && typeof(pos.latitude) != 'undefined')
+                        a(onclick='point_of_sale_form.deleteGeoForPOS("' + pos._id + '")', style="color: #dd0000; text-shadow: 0 0 3px #333; margin-right: 8px; cursor: pointer;")
+                            i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Erase geo-location")
+            label.control-label.col-sm-2(style="") Mechanization
+            .col-sm-4
+                -if(read_only)
+                    label.form-control(style="padding-top: 5px; color: #222;  text-shadow: none;")= (hasPos ? pos.a56_code : "")
+                -else
+                    span.form-control.select2-field
+                        select.mechanization.form-control
+                            option
+                            option(selected=((hasPos && pos.a56_code == 'Yes') || !hasPos), value='Yes') Yes
+                            option(selected=(hasPos && pos.a56_code == 'No'), value='No') No
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/js/forms/point-of-sale-form.js', type='text/javascript')
+    style.
+        .form-control {
+            padding: inherit;
+        }

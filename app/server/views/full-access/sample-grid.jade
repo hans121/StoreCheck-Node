@@ -1,0 +1,57 @@
+
+//- The view seen by auditors when they click on a product link while viewing a visit
+
+extends ../layout
+
+block append content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/image
+    include ../widgets/sample-grid
+    include ../widgets/collapsible-tree
+    include ../widgets/question-carousel
+
+    mixin navbar()
+    .container-fluid
+        div
+            h3 Sample Grid
+            .form-horizontal
+                .row
+                    .col-sm-5.col-md-5.col-lg-3
+                        .well(style="min-height: 200px;")
+                            mixin collapsible_tree(samples.samples, samples.question_id)
+                    div(style="overflow: auto;")
+                        .well(style="max-height: 330px;")
+                            mixin question_carousel(samples, 'vsgc', read_only)
+                        mixin sample_grid(samples.samples, read_only)
+        mixin image_dialog()
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/sampleGridController.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var sampleDeleteId, visitId, vsgc;
+        var samples = !{typeof(samples.samples) != 'undefined' ? JSON.stringify(samples.samples) : []};
+
+        $(function() {
+            vsgc = new SampleGridController();
+
+            if("#{samples.question_id}".length > 0) {
+                vsgc.init("#{samples.next_question_id}",
+                        "#{samples.prior_question_id}",
+                        "#{samples.question_id}",
+                        null,
+                        null,
+                        null,
+                        samples,
+                        $('.grid-treenav-container'),
+                        #{read_only});
+            }
+        });
+

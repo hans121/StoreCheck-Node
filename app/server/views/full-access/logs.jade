@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left System Logs
+        button.btn.btn-xs.btn-danger.btn-clear Clear
+        .controls.pull-right
+            .date-range-container
+        .clock-widget-container.pull-right
+        .table-container(style="width:100%; overflow-y:auto")
+           table.table.table-bordered.table-striped
+               thead
+                   tr
+                       th.filter-false(style="width: 200px;") Timestamp
+                       th(style="width: 80px;") Level
+                       th Host
+                       th(style="width: 80px;") Node
+                       th Message
+               tbody
+           mixin table_pager('logs-pager', 50)
+    .pager-mobile
+        mixin table_pager('logs-pager', 50)
+
+    link(type='text/css', href='/vendor/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/vendor/moment.min.js')
+    script(src='/vendor/purl.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script(src='/js/widgets/logs-table.js')
+    script(src='/js/widgets/date-range-widget.js')
+    script(src='/js/widgets/clock-widget.js')
+    script(src='/js/pages/logs.js')
+    style.
+        .clock-widget-container {
+            margin-right: 20px;
+        }
+        .btn-clear {
+            margin-left: 10px;
+        }

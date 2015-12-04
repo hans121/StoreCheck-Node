@@ -1,0 +1,30 @@
+{
+    "type":"array",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/validation-error",
+    "title": "validation-error",
+    "description": "validation error response body",
+    "required": false,
+    "items": {
+        "properties": {
+            "type": "object",
+            "properties": {
+                "attribute": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "any"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "schemaUri": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

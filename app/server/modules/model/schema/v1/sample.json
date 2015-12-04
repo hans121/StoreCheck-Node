@@ -1,0 +1,196 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/sample",
+    "title": "sample",
+    "description": "a sample as returned by Store Check service queries",
+    "required": true,
+    "properties": {
+        "_id": {
+            "type": "string"
+        },
+        "active": {
+            "type": "string"
+        },
+        "state": {
+            "enum": [ "draft", "submitted", "validated", "released", "to-be-corrected" ]
+        },
+        "batch_code": {
+            "type": "string"
+        },
+        "best_by_date": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "note": {
+            "type": "string"
+        },
+        "product_id": {
+            "type": "string"
+        },
+        "product_name": {
+            "type": "string"
+        },
+        "product_code": {
+            "type": "string"
+        },
+        "visit_id": {
+            "type": "string"
+        },
+        "non_conform": {
+            "type": "array",
+            "required": false,
+            "items": {
+                "type": "string",
+                "required": false
+            }
+        },
+        "alerts": {
+            "type": "array",
+            "required": false,
+            "items": {
+                "type": "string",
+                "required": false
+            }
+        },
+        "image_count": {
+            "type": "int"
+        },
+        "questions": {
+            "type": "array",
+            "required": false,
+            "items": {
+                "type": "object",
+                "required": false,
+                "properties": {
+                    "answers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties":{
+                                "active": {
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "default_indicator": {
+                                    "type": "number"
+                                },
+                                "default_value": {
+                                    "type": "string"
+                                },
+                                "identity_id": {
+                                    "type": "string"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "weight": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "category_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "category_specific_options": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "category_specific": {
+                        "type": "string"
+                    },
+                    "company_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "identity_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "level1_code": {
+                        "type": "string",
+                        "id": "http://jsonschema.net/questions/0/level1_code",
+                        "required": true
+                    },
+                    "level1_description2": {
+                        "type": "string"
+                    },
+                    "level1_description3": {
+                        "type": "string"
+                    },
+                    "level1_description": {
+                        "type": "string"
+                    },
+                    "level2_code": {
+                        "type": "string"
+                    },
+                    "level2_description2": {
+                        "type": "string"
+                    },
+                    "level2_description3": {
+                        "type": "string"
+                    },
+                    "level2_description": {
+                        "type": "string"
+                    },
+                    "level3_code": {
+                        "type": "string"
+                    },
+                    "level3_description2": {
+                        "type": "string"
+                    },
+                    "level3_description3": {
+                        "type": "string"
+                    },
+                    "level3_description": {
+                        "type": "string"
+                    },
+                    "level4_code": {
+                        "type": "string"
+                    },
+                    "level4_description2": {
+                        "type": "string"
+                    },
+                    "level4_description3": {
+                        "type": "string"
+                    },
+                    "level4_description": {
+                        "type": "string"
+                    },
+                    "level5_code": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "level5_description2": {
+                        "type": "string"
+                    },
+                    "level5_description3": {
+                        "type": "string"
+                    },
+                    "level5_description": {
+                        "type": "string"
+                    },
+                    "image_urls": {
+                        "type": "array",
+                        "required": false,
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "t03_code": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            }
+        }
+    }
+}

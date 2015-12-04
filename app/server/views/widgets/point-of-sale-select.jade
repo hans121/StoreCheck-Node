@@ -1,0 +1,79 @@
+block append scripts
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+
+mixin pos_select(classname, style_attrs)
+    div(class=classname, style=style_attrs)
+    //-select(class=classname, style=style_attrs)
+    //-    - for (var i = 0; i < pos_list.length; i++)
+            option(value=pos_list[i]._id, selected=(selected_pos_id == pos_list[i]._id), address=pos_list[i].address1, city=pos_list[i].city)= pos_list[i].company_name
+
+    style.
+        .pos-address {
+            font-size: 10px;
+            color: #777;
+        }
+        .pos-address-selection {
+            font-size: 10px;
+            color: #777;
+            margin-left: 10px;
+        }
+        .select2-highlighted .pos-address {
+            color: #ccc;
+        }
+
+    script.
+        $(function() {
+            function formatPOSResult(pos) {
+                var address = pos.address1;
+                var city = pos.city;
+                if(address != undefined && address.length > 0) {
+                    if(city != undefined && city.length > 0) {
+                        return pos.company_name + '<br/><div class="pos-address">' + address + ", " + city + "</div>";
+                    }
+                    return pos.company_name + '<br/><div class="pos-address">' + address + "</div>";
+                }
+                return pos.company_name+ '<br/><div class="pos-address">no address provided</div>';
+            }
+            function formatPOSSelection(pos) {
+                var address = pos.address1;
+                var city = pos.city;
+                var linkAttrs = 'value="' + pos.id + '" name="' + pos.company_name + '"';
+                if(address != undefined && address.length > 0) {
+                    if(city != undefined && city.length > 0) {
+                        return pos.company_name + '<span class="pos-address-selection" ' + linkAttrs + '>' + address + ", " + city + "</span>";
+                    }
+                    return pos.company_name + '<span class="pos-address-selection"' + linkAttrs + '>' + address + "</span>";
+                }
+                return pos.company_name+ '<span class="pos-address-selection"' + linkAttrs + '>no address provided</span>';
+            }
+            $('.!{classname}').select2({
+                formatSelection: formatPOSSelection,
+                formatResult: formatPOSResult,
+                placeholder: "Select a point of sale",
+                allowClear: true,
+                minimumInputLength: 2,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: "/pos",
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            'filter[company_name]': term,
+                            //term: term, // search term
+                            pageSize: 500,
+                            page: 0
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        if(typeof(data) == 'undefined' || typeof(data.rows) == 'undefined' || data.rows.length == 0) {
+                            return {results: []};
+                        }
+
+                        data.rows.forEach(function(item) {
+                            item.id = item._id;
+                        });
+                        return {results: data.rows};
+                    }
+                }
+            });
+        });

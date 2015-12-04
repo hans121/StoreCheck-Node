@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    .container(style="background-color: white; padding: 25px; border-radius: 10px;")
+        h1(style="color: #777; font-weight: lighter; font-size: 31px;")
+            i.icon-2x.icon-question-sign(style="color:#478fca; margin-right: 20px;")
+            span(style="color:#478fca; font-size: 300%") 404
+            div(style="font-weight: lighter; font-size: 31px; text-shadow: none;")
+                |Resource Not Found
+        hr
+        -if(typeof(error) != 'undefined')
+            h3(style="color: #777; font-size: 18px; font-weight: lighter; text-shadow: none;")
+                div(style="font-weight: lighter;")
+                    |Message:
+            div(style="color: #777; margin-bottom: 15px;")
+                i.icon-search(style="margin-right: 2px; margin-left: 3px; ")
+                span(style="color: #393939; font-weight: lighter; margin-left: 15px; font-size: 16px;")
+                    =error
+        h3(style="color: #777; font-size: 18px; font-weight: lighter; text-shadow: none;")
+            div(style="font-weight: lighter;")
+                |Possible reasons:
+        div(style="color: #777; margin-bottom: 15px;")
+            i.icon-lock(style="margin-right: 2px; margin-left: 3px; ")
+            span(style="color: #393939; font-weight: lighter; margin-left: 15px; font-size: 16px;")
+                |You don't have access to the specified resource
+        div(style="color: #777;margin-bottom: 15px;")
+            i.icon-search
+            span(style="color: #393939; font-weight: lighter; margin-left: 15px; font-size: 16px;")
+                |The specified resource does not exist
+        div(style="color: #777;")
+            i.icon-beaker
+            span(style="color: #393939; font-weight: lighter; margin-left: 15px; font-size: 16px;")
+                |The specified resource is under maintenance
+        hr
+        a(href="/home", style="color: #53c7b0;")
+            |Go back to home

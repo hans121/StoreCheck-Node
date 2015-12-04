@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Auditor Teams
+            .pull-right
+                button.btn.btn-primary(style='margin-bottom:5px;', onclick='window.location.href="/audit-team/view/create"')
+                    i.icon-plus.icon-white.icon-inner
+                    |Add New
+        div(style="width:100%; overflow-y:auto")
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th Name
+                        th(style="width:200px") Members
+                        th.sorter-shortDate(style='width:180px') Creation Time
+                        th(style='width:50px')
+                tbody
+                    - each team in teams
+                        tr
+                            td
+                                a(href="/audit-team/view/" + team._id)= team.name
+                            td= team.members.map(function(member) { return " "+member.name; }).join()
+                            td= formatter.formatDateTimeAsLocal(team.created)
+                            td
+                                div(align="right")
+                                    a(href="/audit-team/view/" + team._id, style="margin-left: 5px; color: #00aa00;")
+                                        i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                    a(onclick="atc.deactivateTeam(\"" + team._id + "\");", style="margin-left: 5px; cursor: pointer; color: #aa0000;")
+                                        i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Deactivate")
+            mixin table_pager()
+        .pager-mobile
+            mixin table_pager()
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/auditTeamController.js')
+    script.
+        var atc;
+        $(function() {
+            atc = new AuditTeamController();
+            sortable_table.init('table');
+        });

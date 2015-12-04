@@ -1,0 +1,7 @@
+block append scripts
+    //-link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    //-script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/js/widgets/auditor-select.js')
+
+mixin auditor_select(classname, style_attrs)
+    input.auditor-select-widget(class=classname, style=style_attrs)

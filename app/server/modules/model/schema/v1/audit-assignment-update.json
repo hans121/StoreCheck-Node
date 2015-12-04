@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/audit-assignment-update",
+    "title": "audit-assignment-update",
+    "description": "audit-assignment update request body",
+    "required": true,
+    "properties":{
+        "storecheck_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "team_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        }
+    }
+}

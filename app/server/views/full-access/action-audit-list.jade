@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    style.
+        input.exclusion {
+            margin-left: 2px;
+        }
+        input.exclusion:not(:last-child) {
+            margin-right: 15px;
+        }
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 History
+        div(style="background-color: #fff; padding: 20px;")
+            .action-chart-container(style="height: 250px;width:100%;overflow-y:auto;")
+            .action-audit-legend(style="width:100%;")
+        .pull-right(style="position: relative; right: 0;  margin-top: 18px; margin-bottom: 10px;")
+            |exclude sample
+            input.exclude-sample.exclusion(type="checkbox", data-exclude="sample")
+            |exclude pos
+            input.exclude-pos.exclusion(type="checkbox", data-exclude="pos")
+            |exclude template
+            input.exclude-template.exclusion(type="checkbox", data-exclude="template")
+            |exclude store check
+            input.exclude-sample.exclusion(type="checkbox", data-exclude="store-check")
+            |exclude user
+            input.exclude-user.exclusion(type="checkbox", data-exclude="user")
+            |exclude visit
+            input.exclude-visit.exclusion(type="checkbox", data-exclude="visit")
+            |exclude audit assignment
+            input.exclude-audit-assignment.exclusion(type="checkbox", data-exclude="audit-assignment")
+            |exclude audit team
+            input.exclude-audit-team.exclusion(type="checkbox", data-exclude="audit-team")
+            |exclude sample answers
+            input.exclude-sample-answers.exclusion(type="checkbox", data-exclude="sample/answer", checked)
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped.audit-table
+                thead
+                    tr
+                        th(class="sorter-text", style="min-width: 165px;") Time
+                        th(style="min-width: 160px;") Local Time
+                        th Action
+                        th(style="min-width: 160px;") Resource
+                        th Details
+                        th Agent
+                tbody
+        .flot-tooltip(style="position: absolute; border: 1px solid rgb(255, 221, 221); padding: 2px; background-color: rgb(255, 238, 238); opacity: 0.8; top: 290px; left: 517px; display: none;")
+
+block append scripts
+    link(type='text/css', href='/vendor/css/tablesorter.css',  rel='stylesheet')
+    script(src='/vendor/jquery.flot.min.js')
+    script(src='/vendor/jquery.flot.barnumbers.js')
+    script(src='/vendor/moment.min.js')
+    script(src='/js/charts/audit-chart.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.widgets.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/action-audit-list.js')
+
+

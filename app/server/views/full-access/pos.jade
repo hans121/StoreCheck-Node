@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/pos-form-fields
+
+    mixin navbar()
+    .container
+        mixin message_bar_container()
+        -if(pos.source == 'import')
+            form( method="post").form-horizontal.well
+                h3 View Point of Sale
+                hr
+                body
+                    .row(style="padding-right: 20px; padding-left: 20px;")
+                        mixin pos_form_fields(pos, true)
+        - else
+            form( method="post").form-horizontal.well
+                h3 Edit Point of Sale
+                hr
+                body
+                    div(style="padding-right: 20px; padding-left: 20px;")
+                        mixin pos_form_fields(pos, false)
+                .form-actions
+                    .pull-right
+                        button(type='button').pos-edit-form-btn-cancel.btn.btn-warning Cancel
+                        button(type='button').pos-edit-form-btn-save.btn.btn-primary Save
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/pointOfSaleController.js')
+    script.
+        var posController;
+        $(function($){
+            posController = new PointOfSaleController();
+
+            point_of_sale_form.init(posController);
+            posController.initEdit("#{pos._id}");
+        });

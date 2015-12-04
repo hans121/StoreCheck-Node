@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Production Lines
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th Code
+                        th Description
+                        th Group Code
+                        th Active
+                tbody
+                    - each line in production_lines
+                        tr
+                            td
+                                a(href="/production-line/" + line._id + "/view")= line.code
+                            td= line.description1
+                            td= line.group_code
+                            td= line.active
+        mixin table_pager('production-line-pager')
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script.
+        $(function($) {
+            sortable_table.init('table');
+        });

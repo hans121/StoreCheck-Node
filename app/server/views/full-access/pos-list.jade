@@ -1,0 +1,69 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Points of Sale
+            .pull-right
+                button.btn.btn-primary(style='margin-bottom:5px;', onclick='window.location.href="/point-of-sale/view/create";')
+                    i.icon-plus.icon-white.icon-inner
+                    |Add New
+        -if(access.hasAccess(caller.roles[0], 'pos', 'd'))
+            div(style="display: none;").can-delete-pos
+        -if((caller.roles.indexOf('CBU') != -1 || caller.roles.indexOf('exec') != -1 || caller.roles.indexOf('admin') != -1))
+            div(style="display: none;").can-geocode
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped.pos-table(style="display: none;")
+                thead
+                    tr
+                        th Customer
+                        th Company
+                        th Address
+                        th City
+                        -if(access.hasRole(caller, 'admin'))
+                            th Country
+                        th Admin Area
+                        th() Distribution Channel
+                        th(class="sorter-false filter-false", style='width:70px')
+                tbody
+            mixin table_pager()
+
+block append scripts
+    script(src='/vendor/purl.js')
+    script(src='/js/widgets/pos-table.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/pointOfSaleController.js')
+    script.
+        var pc = new PointOfSaleController();
+        function deletePOS(id) {
+            pc.showConfirmation('Are you sure you want to delete this point of sale?', 'Confirm Deletion', 'Yes', function() {
+                pc.showLoadingMessage('Deleting...');
+                $.ajax({
+                    url: '/pos/' + id,
+                    type: 'DELETE',
+                    success: function(data){
+                        window.location.reload();
+                    },
+                    error: function(jqXHR){
+                        pc.showAlert(jqXHR.responseText, 'Error');
+                    }
+                });
+            });
+        }
+
+        $(function() {
+            // !{access.hasAccess(caller.roles[0], 'pos', 'd') ? 'true' : 'false'}
+            pos_table.init({isAdmin: !{access.hasRole(caller, 'admin') ? 'true' : 'false'}, isCBU: !{access.hasRole(caller, 'CBU') ? 'true' : 'false'}, canDelete: false});
+
+            $('.pager').css('position', '');
+            $('.pos-table').css('display', '');
+        });

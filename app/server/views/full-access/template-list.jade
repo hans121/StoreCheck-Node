@@ -1,0 +1,73 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/single-input-modal
+
+    mixin navbar()
+    mixin single_input_modal("template-name-modal", "Enter Template Name", "Enter a name for the new template", "Cancel", "Save", "text")
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left Audit Grid Templates
+        .pull-right
+            button.btn.btn-primary(style='margin-bottom:5px;', onclick='window.location.href="/template/view/create"')
+                i.icon-plus.icon-white.icon-inner
+                |Add New
+        .pull-right(style="margin-right: 10px;")
+            select.select-status
+                option(value="active") Active
+                option(value="inactive") Inactive
+        .clearfix
+        table.table.table-bordered.table-striped.template-table
+            thead
+                tr
+                    th(style='min-width:180px') Name
+                    th(style='width:200px') Created By
+                    th(style='width:180px') Creation Time
+                    th(style='width:75px')
+            tbody
+
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/templateController.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js', type='text/javascript')
+    script(src='/vendor/moment.min.js')
+    script(src='/js/pages/template-list.js')
+
+    script(id="template_table_row", type="text/x-dot-template").
+        {{~it :template:index}}
+            <tr>
+                <td><a href="/template/view/{{=template._id}}">{{=template.name}}</a></td>
+                <td>{{=template.created_by}}</td>
+                <td>{{=moment(template.creation_time).local().format('DD-MMM-YYYY, HH:mm:ss')}}</td>
+                <td>
+                    <div align="right">
+                        {{? !template.read_only && template.state == "active" }}
+                            <a href="/template/view/{{=template._id}}" style="cursor: pointer; color: #00aa00;">
+                                <i class="icon-pencil ui-tooltip" data-placement="bottom" data-original-title="Edit"></i>
+                            </a>
+                        {{?}}
+                        <a class="duplicate-template" data-id="{{=template._id}}" style="margin-left: 3px; cursor: pointer; color: #ffa500;">
+                            <i class="icon-copy ui-tooltip" data-placement="bottom" data-original-title="Duplicate"></i>
+                        </a>
+                        {{? template.state == "active" }}
+                            <a class="deactivate-template" data-id="{{=template._id}}" style="margin-left: 3px; cursor: pointer; color: #aa0000;">
+                                <i class="icon-remove ui-tooltip" data-placement="bottom" data-original-title="Deactivate"></i>
+                            </a>
+                        {{??}}
+                            <a class="reactivate-template" data-id="{{=template._id}}" style="margin-left: 3px; cursor: pointer; color: #00aa00;">
+                                <i class="icon-play-sign ui-tooltip" data-placement="bottom" data-original-title="Reactivate"></i>
+                            </a>
+                        {{?}}
+                    </div>
+                </td>
+            </tr>
+        {{~}}

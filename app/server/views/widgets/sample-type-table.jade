@@ -1,0 +1,51 @@
+mixin sample_type_table(sample_types, products, visit)
+    //- For each product/template combo, we need to get a list of sample ids
+    - sampleEntries = {}
+    - each sample_type in sample_types
+        -var key = sample_type.product_id + '_' + sample_type.template_id;
+        -sampleEntries[key] = { samples: [], sample_ids: "", product_id: sample_type.product_id, template_id: sample_type.template_id };
+
+    - each sample in visit.samples
+        -var key = sample.product_id + '_' + sample.template_id;
+        -if(sampleEntries[key])
+            -sampleEntries[key].samples.push(sample);
+            -if(sampleEntries[key].sample_ids.length == 0)
+                -sampleEntries[key].sample_ids = sample.id;
+            -else
+                -sampleEntries[key].sample_ids += ',' + sample.id;
+
+    div(style='overflow:auto;')
+        table.table.table-bordered.table-striped.sample-type-table
+            thead
+                tr
+                    th Product/SKU
+                    th Template
+                    th Quantity of Samples
+                    th(style="width: 60px;")
+            tbody
+                - each sample_type_key in Object.keys(sampleEntries)
+                    - sample_to_copy = { };
+                    - var sample_type_entry = sampleEntries[sample_type_key];
+                    - if(sample_type_entry.samples.length > 0)
+                        - sample_to_copy = sample_type_entry.samples[sample_type_entry.samples.length - 1];
+
+                    tr
+                        td
+                            -each product in products
+                                -if(product._id == sample_type_entry.product_id)
+                                    = product.description3
+                        td
+                            -each template in templates
+                                - if(template._id == sample_type_entry.template_id)
+                                    = template.name
+                        td
+                            = sample_type_entry.samples.length
+                            -if(visit.state == 'draft' && !read_only)
+                                a(onclick="vc.addSampleType(\"" + sample_type_entry.product_id + "\", \"" + sample_type_entry.template_id + "\", \"" + sample_to_copy.id + "\");", style="color: #00aa00; cursor: pointer;")
+                                    i.icon-plus.ui-tooltip(data-placement="bottom", data-original-title="Add a sample for this product", style="margin-left: 5px;")
+                        td(style="text-align: right; padding-right: 10px;")
+                            -if(sample_type_entry.samples.length > 0)
+                                a(href="/samples/" + sample_type_entry.sample_ids + "/view", style="color: #3366FF; cursor: pointer;")
+                                    i.icon-list.ui-tooltip(data-placement="bottom", data-original-title="View these samples in a list", style="")
+                                a(href="/samples/" + sample_type_entry.sample_ids + "/view/grid", style="color: #3366FF; cursor: pointer;")
+                                    i.icon-th.ui-tooltip(data-placement="bottom", data-original-title="View these samples in a grid", style="margin-left: 10px;")

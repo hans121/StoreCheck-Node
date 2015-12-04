@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/organization-form-fields
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        form( method="post")#organization-form.form-horizontal.well.span6
+            h3 Create Organization
+            p.subheading Please provide details about the organization.
+            hr
+            mixin organization_form_fields()
+            .form-actions
+                .pull-right
+                    button(type='button', onclick='window.location.href="/organizations/view";')#organization-form-btn-cancel.btn.btn-warning Cancel
+                    button(type='button')#organization-form-btn-create.btn.btn-primary Create
+
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/organizationController.js')
+    script
+        var oc;
+        $(function() {
+            oc = new OrganizationController();
+        });

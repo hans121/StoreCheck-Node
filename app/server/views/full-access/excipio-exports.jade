@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left Excipio Exports
+        .controls.pull-right
+            button.btn.btn-danger.clear-button Clear All
+        .clearfix
+        .table-container(style="overflow-y:auto;")
+           table.table.table-bordered.table-striped
+               thead
+                   tr
+                       th(style="width: 170px;") Timestamp
+                       th(style="width: 250px;") Destination
+                       th(style="width: 80px;") Retries
+                       th Details
+               tbody
+           mixin table_pager('excipio-exports-pager', 50)
+
+    script(src='/js/controllers/pageController.js')
+    script(src='/vendor/purl.js')
+    script(src='/js/widgets/excipio-exports-table.js')
+    script(src='/js/pages/excipio-exports.js')

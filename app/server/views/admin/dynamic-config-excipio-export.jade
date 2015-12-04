@@ -1,0 +1,121 @@
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    - values = {}
+    - pos_values = {}
+    -if(typeof(config) != 'undefined' && typeof(config.values) != 'undefined')
+        - values = config.values;
+        - if(typeof(values.pos) != 'undefined')
+            - pos_values = values.pos;
+
+    mixin pos_input(text_attr, class_name, field_name, default_value)
+        label(style="width: 180px;")= text_attr
+        input(type="text", size=4, class=class_name, value=(typeof(pos_values[field_name]) != 'undefined' ? pos_values[field_name] : default_value))
+
+    mixin navbar()
+    .container
+        h3 Excipio Export Options
+        .well
+            h3 Date/Time Formatting
+            .container-fluid
+                .col-xs-12
+                    label(style="width: 150px;") Date Format
+                    select.date-format(data-format=(typeof(values.date_format) != 'undefined' ? values.date_format : ''))
+                        option(value="MM/DD/YYYY") MM/DD/YYYY
+                        option(value="MM-DD-YYYY") MM-DD-YYYY
+                        option(value="DD/MM/YYYY") DD/MM/YYYY
+                        option(value="DD-MM-YYYY") DD-MM-YYYY
+                        option(value="YYYY-MM-DD") YYYY-MM-DD
+                        option(value="YYYY/MM/DD") YYYY/MM/DD
+                        option(value="YYYY-DD-MM") YYYY-DD-MM
+                        option(value="YYYY/DD/MM") YYYY/DD/MM
+                    .clearfix
+                .col-xs-12
+                    label(style="width: 150px;") DateTime Format
+                    select.date-time-format(data-format=(typeof(values.datetime_format) != 'undefined' ? values.datetime_format : ''))
+                        option(value="MM/DD/YYYY HH:mm:ss") MM/DD/YYYY HH:mm:ss
+                        option(value="MM-DD-YYYY HH:mm:ss") MM-DD-YYYY HH:mm:ss
+                        option(value="DD/MM/YYYY HH:mm:ss") DD/MM/YYYY HH:mm:ss
+                        option(value="DD-MM-YYYY HH:mm:ss") DD-MM-YYYY HH:mm:ss
+                        option(value="YYYY-MM-DD HH:mm:ss") YYYY-MM-DD HH:mm:ss
+                        option(value="YYYY/MM/DD HH:mm:ss") YYYY/MM/DD HH:mm:ss
+                        option(value="YYYY-DD-MM HH:mm:ss") YYYY-DD-MM HH:mm:ss
+                        option(value="YYYY/DD/MM HH:mm:ss") YYYY/DD/MM HH:mm:ss
+            .col-xs-12
+                hr
+            h3 Image Settings
+            .col-xs-12
+                label.col-xs-12.col-sm-2 File Prefix
+                input(type="text").col-xs-12.col-sm-10.image-prefix(value=values.image_prefix)
+            .col-xs-12
+                hr
+            h3 Sample States to Auto-Export
+            .col-xs-12
+                .col-xs-12
+                    label(style="width: 180px;") Validated
+                    input(type="checkbox", checked=(typeof(values.sample_states_to_export) != 'undefined' ? values.sample_states_to_export.indexOf('validated') != -1 : true)).export-validated-samples
+                .col-xs-12
+                    label(style="width: 180px;") Released
+                    input(type="checkbox", checked=(typeof(values.sample_states_to_export) != 'undefined' ? values.sample_states_to_export.indexOf('released') != -1 : true)).export-released-samples
+            .clearfix
+            .col-xs-12
+                hr
+            h3 Point of Sale Field Limits
+            .container-fluid
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Address 1 Length", "address-1-length", "address_1_length", 80)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Address 2 Length", "address-2-length", "address_2_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Address 3 Length", "address-3-length", "address_3_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("City Length", "city-length", "city_length", 30)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("State Length", "state-length", "state_length", 3)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Postal Code Length", "postal-code-length", "postal_code_length", 10)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Country Length", "country-length", "country_length", 3)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Email2 Length", "email2-length", "email2_length", 255)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Company Name Length", "company-name-length", "company_name_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Address Type Code Length", "address-type-code-length", "address_type_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("Account # Length", "account-number-length", "account_number_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A12 Code Length", "a12-code-length", "a12_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A47 Code Length", "a47-code-length", "a47_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A48 Code Length", "a48-code-length", "a48_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A50 Code Length", "a50-code-length", "a50_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A52 Code Length", "a52-code-length", "a52_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A53 Code Length", "a53-code-length", "a53_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A54 Code Length", "a54-code-length", "a54_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A56 Code Length", "a56-code-length", "a56_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A57 Code Length", "a57-code-length", "a57_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A59 Code Length", "a59-code-length", "a59_code_length", 40)
+                .col-xs-12.col-sm-6.col-md-4(style="padding-bottom:5px;")
+                    +pos_input("A70 Code Length", "a70-code-length", "a70_code_length", 40)
+            .clearfix
+        .clearfix
+        button.save-dynamic-config-btn.btn.btn-primary.pull-right Save
+
+block append scripts
+    script(src='/vendor/moment.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/pages/dynamic-config-excipio-export.js')

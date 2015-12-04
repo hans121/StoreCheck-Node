@@ -1,0 +1,71 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/add-pos
+    include ../widgets/point-of-sale-select
+
+    mixin navbar()
+    mixin add_pos_dialog("add-new-pos-dialog")
+    .container-fluid
+        mixin message_bar_container()
+        form.form-horizontal.well.pull-left
+            h3= sc.name + ' - New Visit'
+            hr
+            #date-of-visit-cg.control-group
+                label.control-label(for='date-of-visit-cg') Date of Visit
+                .controls
+                    div#date-of-visit.input-append.date.datepicker(data-date="", data-date-format="dd-mmm-yyyy")
+                        input#date-of-visit-input(placeholder="dd-mmm-yyyy", style="width: 110px;", size="16", type="text", value=value=moment.utc().local().format('DD-MMM-YYYY'))
+                        span#date-of-visit-icon.add-on.calendar-add-on
+                            i.icon-calendar
+            #auditor-name-cg.control-group
+                label.control-label(for='auditor-name-cg') Auditor Name
+                .controls
+                    input#auditor-name-input(type='text', name='name', value= '')
+            #point-of-sale-cg.control-group
+                label.control-label(for='point-of-sale-cg') POS
+                .controls(style="overflow: visible;")
+                    mixin pos_select("point-of-sale", "width: 100%;")
+                    .pull-right
+                        button.btn.btn-info.btn-small(style="margin-top: 5px;", onclick='showCreatePos();  return false;') Create Point of Sale
+                    .clearfix
+            .form-actions
+                .pull-right
+                    button.btn.btn-primary.btn-create-visit Create Visit
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/visitController.js')
+    script(src='/js/controllers/pointOfSaleController.js')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/vendor/jquery.placeholder.min.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var vc, pos_c;
+        $(function($){
+            $('input').placeholder();
+            $('.datepicker').datepicker({format: 'dd-M-yyyy', changeYear: true, autoclose: true});
+
+            vc = new VisitController(null, '#{aud._id}', '#{sc._id}');
+            vc.init();
+
+            pos_c = new PointOfSaleController();
+            point_of_sale_form.init(pos_c);
+            $('.add-new-pos-dialog').find('.submit').click(function() {
+                $('.add-new-pos-dialog').modal('hide');
+                var pos = pos_c.getFromForm();
+                pos_c.create(function(created_pos_id) {
+                    pos_c.hideLoadingMessage();
+                });
+            });
+        });
+
+        function showCreatePos() {
+            $('.add-new-pos-dialog').modal('show');
+        }

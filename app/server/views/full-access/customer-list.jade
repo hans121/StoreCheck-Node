@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Customers
+        div(style="overflow: auto;")
+            table.table.table-bordered.table-striped.customers-table(style="display: none;")
+                thead
+                    tr
+                        th Code
+                        th Description
+                        th Identity ID
+                        th Active
+                tbody
+                    - each customer in items
+                        tr
+                            td= customer.code
+                            td= customer.description
+                            td= customer.identity_id
+                            td= customer.active
+            mixin table_pager()
+        .pager-mobile
+            mixin table_pager()
+block append scripts
+    script.
+        $(function() {
+            sortable_table.init('.customers-table');
+            $('.pager').css('position', '');
+            $('.customers-table').css('display', '');
+        });

@@ -1,0 +1,50 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/sample/update",
+    "title": "sample-update",
+    "description": "a sample update request body",
+    "required": true,
+    "properties": {
+        "batch_code": {
+            "type": "string"
+        },
+        "best_by_date": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "note": {
+            "type": "string"
+        },
+        "factory_id": {
+            "type": "string",
+            "required": false
+        },
+        "production_line_id": {
+            "type": "string",
+            "required": false
+        },
+        "questions": {
+            "type": "array",
+            "required": true,
+            "items": {
+                "type": "object",
+                "required": false,
+                "properties": {
+                    "identity_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "image_urls": {
+                        "type": "array"
+                    },
+                    "answer": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

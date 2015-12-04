@@ -1,0 +1,113 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .well
+            h3 View Production Line
+            hr
+            body
+                .flex-wrap
+                    .pad-some
+                        label Company ID
+                        = production_line.company_id
+                    .pad-some
+                        label Code
+                        = production_line.code
+                    .pad-some
+                        label Hierarchy Level
+                        = production_line.hierarchy_level
+                    .pad-some
+                        label Display Sequence
+                        = production_line.display_sequence
+                    .pad-some
+                        label Active
+                        = production_line.active
+                    .pad-some
+                        label Full Case Required
+                        = production_line.full_case_required
+                    .pad-some
+                        label Subcategory Code
+                        = production_line.subcategory_code
+                    .pad-some
+                        label Group Code
+                        = production_line.group_code
+                    .pad-some
+                        label Subgroup Code
+                        = production_line.subgroup_code
+                    .pad-some
+                        label Section Code
+                        = production_line.section_code
+                    .pad-some
+                        label Subsection Code
+                        = production_line.subsection_code
+                    .pad-some
+                        label Category-Specific
+                        = production_line.category_specific
+                    .pad-some
+                        label Description1
+                        = production_line.description1
+                    .pad-some
+                        label Description2
+                        = production_line.description2
+                    .pad-some
+                        label Description3
+                        = production_line.description3
+                    .pad-some
+                        label Active Start Date
+                        = production_line.active_start_date
+                    .pad-some
+                        label Active End Date
+                        = production_line.active_end_date
+                    .pad-some
+                        label Date Added
+                        = production_line.date_added
+                    .pad-some
+                        label Added By User Code
+                        = production_line.added_by_user_code
+                    .pad-some
+                        label Date Changed
+                        = production_line.date_changed
+                    .pad-some
+                        label Changed By User Code
+                        = production_line.changed_by_user_code
+                    .pad-some
+                        label Alert Infocenter Code
+                        = production_line.alert_infocenter_code
+                    .pad-some
+                        label Infocenter Code
+                        = production_line.infocenter_code
+                    .pad-some
+                        label Text Search
+                        = production_line.text_search
+                    .pad-some
+                        label Identity ID
+                        = production_line.identity_id
+                    .pad-some
+                        label Source
+                        = production_line.source
+                    .pad-some
+                        label Schema Version
+                        = production_line.version
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script.
+        var pc;
+        $(function($){
+            pc = new PageController();
+        });
+    style.
+        .pad-some {
+            background-color: #999;
+            border-radius: 5px;
+            margin: 3px;
+            padding: 5px;
+        }

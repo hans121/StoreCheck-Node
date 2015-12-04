@@ -1,0 +1,12 @@
+block append scripts
+    //-link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    //-script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/js/widgets/product-select.js')
+    style.
+        .product-code {
+            font-size: 10px;
+            color: #777;
+        }
+
+mixin product_select(classname, style_attrs)
+    input.product-select-widget(class=classname, style=style_attrs)

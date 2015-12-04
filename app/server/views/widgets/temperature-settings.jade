@@ -1,0 +1,21 @@
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script(src='/js/util/category-specific.js')
+    script(src='/js/widgets/temperature-settings.js')
+    style.
+        .temperature-settings-container > .well:first-child {
+            margin-top: 10px;
+        }
+        .temperature-settings-container > .well:last-child {
+            margin-bottom: 0;
+        }
+
+mixin temperature_settings(title)
+    h4.pull-left(style="margin-top: 8px;")= title
+    button.btn.btn-primary.add-temperature-setting.pull-right Add
+        i.icon-plus
+    .clearfix
+    .temperature-settings-container
+    .clearfix
+

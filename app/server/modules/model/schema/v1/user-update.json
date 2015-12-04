@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/user-update",
+    "title": "user-update",
+    "description": "user as returned by Store Check service queries",
+    "required": true,
+    "properties":{
+        "user": {
+            "type":"string",
+            "required":true
+        },
+        "name": {
+            "type":"string",
+            "required":false
+        },
+        "email": {
+            "type":"string",
+            "required":false
+        },
+        "pass": {
+            "type":"string",
+            "required":false
+        },
+        "role": {
+            "type":"string",
+            "required":false
+        },
+        "orgId": {
+            "type":"string",
+            "required":false,
+            "minLength": 12
+        }
+    }
+}

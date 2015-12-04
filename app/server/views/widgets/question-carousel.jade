@@ -1,0 +1,52 @@
+mixin question_carousel(sample_meta, page_controller_name, read_only)
+
+    //- do a few simple calculations
+    - questionIndex = 0;
+    - questionCount = sample_meta.samples && sample_meta.samples.length > 0 ? sample_meta.samples[0].questions.length : 0;
+    - if(questionCount > 0) {
+    -     sample_meta.samples[0].questions.forEach(function(el, index, array) {
+    -       if(el.identity_id == samples.question_id) { questionIndex = index + 1; }
+    -     });
+    - }
+
+    -if(storechecks != null || visits != null || products != null)
+        fieldset
+            table(style="width: 100%")
+                thead
+                tbody
+                    tr
+                        td.text-left
+                            -if(storechecks != null && storechecks.length == 1)
+                                label Store Check
+                                div(style="color: #444;")= storechecks[0].name
+                        td.text-center
+                            -if(visits != null && visits.length == 1)
+                                label Visit
+                                div
+                                    a(href="/visit/view/" + visits[0]._id)=visits[0].pos_name + ' ' + visits[0].date_of_visit
+                        td.text-right
+                            -if(products != null && products.length == 1)
+                                label Product
+                                div
+                                    a(href="/visit/" + visits[0]._id + "/product/" + products[0]._id + "/samples/view")=products[0].description
+    .text-center(style="height: 24px;")
+        button.btn.btn-primary.btn-small.pull-left.prev(class=(questionIndex == 1 ? 'disabled' : ''), onclick="question_control.previous();")
+            i.icon.icon-white.icon-chevron-left(style="margin-right: 10px; padding-left: 0;")
+            |Prev
+        span.question_number
+            =questionIndex + '/' + questionCount
+        button.btn.btn-primary.btn-small.pull-right.next(class=(questionIndex == questionCount ? 'disabled' : ''), onclick="question_control.next();")
+            |Next
+            i.icon.icon-right.icon-white.icon-chevron-right
+        -if(!read_only)
+            button.btn.btn-primary.btn-small.pull-right.save(style="margin-right: 10px;", onclick="question_control.save();")
+                |Save & Stay
+
+    script.
+        $(function() {
+            question_control.init(!{read_only}, !{page_controller_name}, "!{sample_meta.question_id}", "!{sample_meta.prior_question_id}", "!{sample_meta.next_question_id}");
+        });
+
+block append scripts
+    script(src='/js/widgets/question-carousel.js')
+

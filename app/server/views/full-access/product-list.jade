@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Products
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th Product Description
+                        th Product Code
+                        th Flavor
+                        th Default Factory
+                        th Type
+                        th EAN 13
+                        th CBU
+                        th(class="sorter-false filter-false", style='width:20px;')
+                tbody
+        mixin table_pager('product-pager')
+
+block append scripts
+    script(src='/vendor/purl.js')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/productController.js')
+    script(src='/js/widgets/product-table.js')
+    script.
+        $(function() {
+            product_table.init({});
+            //sortable_table.init('table', [[0, 0]], '.product-pager');
+        });

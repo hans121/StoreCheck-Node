@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left Response Times
+        .pull-right
+            .clock-container
+        .clearfix
+        h5.pull-left Average Response Time (ms)
+        button.btn.btn-xs.btn-warning.btn-clear-response-times clear
+        .clearfix
+        .chart-outer-container(style="width:100%;overflow-y:auto;")
+           .avg-chart-container(style="min-width:800px;")
+        h5.pull-left Max Response Time (ms)
+        .clearfix
+        .chart-outer-container(style="height: 250px;width:100%;overflow-y:auto;")
+           .max-chart-container(style="min-width:800px;")
+        h5.pull-left Response Count
+        .clearfix
+        .chart-outer-container(style="height: 250px;width:100%;overflow-y:auto;")
+            .response-count-chart-container(style="min-width:800px;")
+
+        h5.pull-left Longest-Running Responses (Top 10)
+        button.btn.btn-xs.btn-warning.btn-clear-longest-responses clear
+        .clearfix
+        .longest-running-responses-container
+
+        h5.pull-left Long-Running Responses
+        button.btn.btn-xs.btn-warning.btn-clear-long-responses clear
+        .clearfix
+        .long-running-responses-container
+
+    script(src='/vendor/jquery.flot.min.js')
+    script(src='/vendor/moment.min.js')
+    script(src='/js/widgets/clock-widget.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/charts/response-times-chart.js')
+    script(src='/js/pages/response-times.js')
+    style.
+       .chart-outer-container {
+          background-color: #fff;
+          padding: 20px;
+          margin-bottom: 25px;
+       }
+       .long-running-responses-container {
+           margin-bottom: 25px;
+       }
+       .longest-running-responses-container {
+           margin-bottom: 25px;
+       }
+       .btn-clear-longest-responses,
+       .btn-clear-long-responses,
+       .btn-clear-response-times {
+           margin-top: -10px;
+           margin-left: 10px;
+       }

@@ -1,0 +1,58 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .centered-500px
+            form( method="post")#audit-assignment-create-form.form-horizontal.well
+                h3 Create Audit Assignment
+                hr
+                fieldset
+                    #audit-assignment-template-cg.control-group
+                        label.control-label(for='audit-assignment-template-cg') Auditor Team
+                        .controls
+                            select(class="audit-assignment-teams", style="width: auto;")
+                                - for (var i = 0; i < teams.length; i++)
+                                    option(value=teams[i]._id)= teams[i].name
+                    #audit-assignment-store-check-cg.control-group
+                        label.control-label(for='audit-assignment-store-check-cg') Store Check
+                        .controls
+                            select(class="audit-assignment-storecheck", style="width: auto;")
+                                - for (var i = 0; i < storechecks.length; i++)
+                                    option(value=storechecks[i]._id)= storechecks[i].name
+                .form-actions
+                    .pull-right
+                        button(type='button')#audit-assignment-create-form-btn-cancel.btn.btn-warning Cancel
+                        button(type='button')#audit-assignment-create-form-btn-create.btn.btn-primary Create
+
+    script(src='/vendor/jquery.form.min.js')
+    script.
+        $(function(){
+            var pc = new PageController();
+            $('#audit-assignment-create-form-btn-cancel').click(function() {
+                window.location.href = '/audit-teams/view';
+            });
+            $('#audit-assignment-create-form-btn-create').click(function() {
+                $.ajax({
+                    url: '/audit-assignment',
+                    type: 'PUT',
+                    data: {
+                        team_id:            $('.audit-assignment-teams').val(),
+                        storecheck_id:      $('.audit-assignment-storecheck').val()
+                    },
+                    success: function(data){
+                        window.location.href = '/audit-teams/view';
+                    },
+                    error: function(jqXHR){
+                        pc.showAlert('An error has occurred: ' + jqXHR.responseText, 'Error');
+                    }
+                });
+            });
+        });

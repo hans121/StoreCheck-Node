@@ -1,0 +1,26 @@
+mixin user_navbar_item()
+    -if(typeof(caller) != 'undefined')
+        -if(typeof(caller.active_organization_name) != 'undefined' && caller.active_organization_name != null)
+            -if(typeof(caller.roles) != 'undefined' && (caller.roles.indexOf('admin') != -1 || caller.roles.indexOf('exec') != -1))
+                a(style="", href="/user/view/" + caller._id).brand
+                    .pull-left(style="padding-top: 7px;")
+                        i.icon-user.icon-white.icon-2x
+                    span.pull-right(style="margin-left: 10px; margin-right: 10px;")
+                        div= caller.name
+                            i.icon-eye-open.icon-white(style="margin-left: 5px;", title="You have global viewing privileges")
+                        div= " (" + caller.active_organization_name + ")"
+            else
+                a(style="", href="/user/view/" + caller._id).brand
+                    .pull-left(style="padding-top: 7px;")
+                        i.icon-user.icon-white.icon-2x
+                    span.pull-right(style="margin-left: 10px; margin-right: 10px;")
+                        div= caller.name
+                        div= " (" + caller.active_organization_name + ")"
+        -else
+            a(style="", href="/user/view/" + caller._id).brand
+                .pull-left(style="padding-top: 7px;")
+                    i.icon-user.icon-white.icon-2x
+                span.pull-right(style="margin-left: 10px; margin-right: 10px;")
+                    div= caller.name
+                        -if(typeof(caller.is_global) != 'undefined' && caller.is_global)
+                            i.icon-eye-open.icon-white(style="margin-left: 5px;", title="You have global viewing privileges")

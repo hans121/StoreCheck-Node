@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "id": "v1/store-check/create",
+    "title": "store-check-create",
+    "description": "a store-check create request body",
+    "required": true,
+    "properties": {
+        "name": {
+            "type": "string",
+            "required": true,
+            "minLength": 3
+        },
+        "reportDate": {
+            "type": "string",
+            "required": true,
+            "minLength": 11
+        },
+        "notes": {
+            "type": "string",
+            "required": true
+        },
+        "state": {
+            "enum": [ "active", "closed" ]
+        },
+        "type": {
+            "enum": [ "internal", "external" ]
+        }
+    }
+}

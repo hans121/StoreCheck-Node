@@ -1,0 +1,20 @@
+include ../forms/pos-form-fields
+
+block append scripts
+    script(src='/js/widgets/state-select.js')
+
+mixin add_pos_dialog(root_class)
+    .modal(class=root_class, style="width: 90%; max-width: 876px;")
+        .modal-content(style="overflow-y: auto; max-height: 100%;")
+            .modal-header
+                button.close(data-dismiss='modal', style="color: white;")
+                    i.icon-remove
+                h3 Add Point of Sale
+            .modal-body(style="min-height: 405px;")
+                form( method="post", style="margin-bottom: 0;").form-horizontal.well
+                    body
+                        mixin pos_form_fields()
+                    .clearfix
+            .modal-footer
+                button(data-dismiss="modal").cancel.btn.btn-warning Cancel
+                button.submit.btn.btn-primary Create

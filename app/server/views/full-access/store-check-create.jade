@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/store-check-form-fields
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .centered-400px
+            form( method="post")#store-check-form.form-horizontal.well
+                h3 Create Store Check
+                p.subheading Please provide details about the store check.
+                hr
+                mixin storecheck_form_fields(teams)
+                .form-actions
+                    .pull-right
+                        button(type='button', onclick='goToList();')#store-check-form-btn-cancel.btn.btn-warning Cancel
+                        button(type='button')#store-check-form-btn-create.btn.btn-primary Save
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/storeCheckController.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var scc;
+        $(function($){
+            scc = new StoreCheckController();
+        });

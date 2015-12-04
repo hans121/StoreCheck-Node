@@ -1,0 +1,101 @@
+include ../widgets/production-line-select
+include ../widgets/factory-select
+
+mixin sample_form_fields(sample, storecheck, visit, product, factories)
+
+    -canEditStoreCheck = (typeof(access) != 'undefined' ? access.hasAccess(caller.roles[0], 'store-check', 'u') : true)
+
+    h4 General
+    hr
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Store Check
+        .col-sm-8
+            -if(canEditStoreCheck)
+                a.form-control(href="/store-check/view/" + storecheck._id)=storecheck.name
+            -else
+                label.form-control= storecheck.name
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Visit
+        .col-sm-8
+            a.form-control(href="/visit/view/" + visit._id)=visit.pos_name + ' ' + visit.date_of_visit
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Product
+        .col-sm-8
+            label.form-control= product.description
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Sample ID
+        .col-sm-8
+            -if(read_only)
+                label.form-control= sample.name
+            -else
+                input#sample-identifier-input.form-control(type='text', name='name', value=sample.name)
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Best Before Date
+        .col-sm-8
+            -if(read_only)
+                label.best-before.form-control= sample.best_by_date
+            -else
+                .form-control.input-append.date.datepicker(data-date=sample.best_by_date, data-date-format="dd-mmm-yy")
+                    input#sample-best-by-input(placeholder="dd-mmm-yyyy", size="16", type="text", value="", style="width: 110px;")
+                    span.add-on.calendar-add-on
+                        i.icon-calendar
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Remaining Shelf Life
+        .col-sm-8
+            -if(read_only)
+                label.sample-remaining-shelf-life-container.form-control(style="color: #eee;", data-date-of-visit=visit.date_of_visit)
+            -else
+                .sample-remaining-shelf-life-container.form-control(style="color: #eee;", data-date-of-visit=visit.date_of_visit)
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Factory
+        .col-sm-8
+            -if(read_only)
+                label.form-control= sample.factory_code
+            -else
+                span.form-control.select2-field
+                    mixin factory_select("factory-select", "min-width: 210px;")
+                //-
+                    .select2-field.form-control
+                        select.sample-factory
+                            option
+                            - for (var i = 0; i < factories.length; i++)
+                                -if(factories[i]._id == sample.factory_id)
+                                    option(value=factories[i]._id, selected="true")= factories[i].code
+                                -else
+                                    option(value=factories[i]._id)= factories[i].code
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Production Line
+        .col-sm-8
+            -if(read_only)
+                label.form-control=sample.production_line_code
+            -else
+                span.form-control.select2-field
+                    mixin production_line_select("production-line-select", "min-width: 210px;")
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Batch Code
+        .col-sm-8
+            -if(read_only)
+                label.form-control=sample.batch_code
+            -else
+                input.form-control#sample-batch-code-input(type='text', name='batch', value=sample.batch_code)
+    -if(typeof sample.note != 'undefined')
+        .form-group.sample-form-group
+            label.control-label.col-sm-4 Note
+            .col-sm-8
+                -if(read_only)
+                    label.form-control=sample.note
+                -else
+                    textarea.form-control#sample-note-input(rows=3, style='width: 225px;')=sample.note
+    .form-group.sample-form-group
+        label.control-label.col-sm-4 Status
+        .col-sm-8
+            label.form-control= sample.state
+
+block append scripts
+    script(src='/js/forms/sample-form.js', type='text/javascript')
+    style.
+        .sample-form-group a,
+        .sample-form-group label {
+            height: inherit;
+            margin-bottom: 0;
+        }

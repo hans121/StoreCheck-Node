@@ -1,0 +1,134 @@
+include ../modals/single-input-modal
+
+mixin button_array()
+    mixin single_input_modal("restore-path-modal", "Enter Backup Path", "Enter an absolute file path that is a tar.gz archive", "Cancel", "Restore", "text")
+    mixin single_input_modal("process-email-modal", "Enter Email Address", "Enter an email address for completion notifications.", "Cancel", "Begin", "text")
+    .container-fluid
+        |Note: Colors convey relative safety of operations
+        h3(style="margin-top: 10px;") Basic Hierarchy Administration
+        .well
+            button.btn.btn-primary.load-audit-grids(style="margin-bottom:5px") Load Audit Grids from SFTP (G)
+            button.btn.btn-primary.load-points-of-sale(style="margin-bottom:5px") Load Points of Sale from SFTP (G)
+            button.btn.btn-primary.load-general(style="margin-bottom:5px") Load General Hierarchies (C)
+        button.btn.btn-danger.show-superadmin(style="margin-right:15px; margin-bottom:5px;") Show Advanced Hierarchy Administration
+        .advanced-hierarchy-controls(style="display: none; margin-bottom: 20px;")
+            h3 Advanced Hierarchy Administration
+            .flex-wrap
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Template Hierarchy Processing
+                    div(style='padding: 5px;')
+                        |1
+                        span.btn.btn-danger.fileinput-button(style="margin-left: 5px;")
+                            span Load/Process EPC Export Files
+                            input.loadEPC-files(type="file", name="files[]", multiple)
+                    div(style='padding: 5px;')
+                        |2
+                        span.btn.btn-danger.fileinput-button(style="margin-left: 5px;")
+                            span Load/Process EPC Language Files
+                            input.loadEPC-language-files(type="file", name="files[]", multiple)
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Other (flattened) Hierarchies
+                    .flex-wrap
+                        span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                            span Reload Customers
+                            input.loadCustomers-file(type="file", name="files[]")
+                        span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                            span Reload Regions of Sales
+                            input.loadRegionOfSales-file(type="file", name="files[]")
+                        span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                            span Reload Administrative Area
+                            input.admin-area-file(type="file", name="files[]")
+                        span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                            span Reload Customer Platforms
+                            input.customer-platforms-file(type="file", name="files[]")
+                        span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                            span Reload Danone Platforms
+                            input.danone-platforms-file(type="file", name="files[]")
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Product Hierarchy Processing
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-array-form-btn-product-hierarchy.btn.btn-success Reload Product Hierarchy
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Load Factory Hierarchy
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-array-form-btn-factory-process.btn.btn-danger Reload Factory Hierarchy
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Production Line Hierarchy Processing
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-array-form-btn-production-line-process.btn.btn-danger Process Production Line Hierarchy
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Point-of-sale Hierarchy Processing
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-array-form-btn-pos-hierarchy.btn.btn-danger Reload Point of Sale Hierarchy
+                .flex-wrap
+                    .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                        h4 Refresh Geographies
+                        div(style='padding: 5px;')
+                            |1
+                            button(type='button').admin-button-array-form-btn-reload-countries.btn.btn-success Reload Countries
+                        div(style='padding: 5px;')
+                            |2
+                            button(type='button').admin-button-array-form-btn-reload-provinces.btn.btn-success Reload States/Provinces
+                    .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                        h4 Organization Processing
+                        div(style="padding: 5px;")
+                            |1
+                            span.btn.btn-success.fileinput-button(style="margin-left: 5px;")
+                                span Load Organization Hierarchy
+                                input.admin-button-array-form-btn-load-organization(type="file", name="files[]")
+                        div(style="padding: 5px;")
+                            |2
+                            button(type='button').admin-button-array-form-btn-organization-process.btn.btn-success Sync Organizations
+        button.btn.btn-danger.show-general-advanced(style="margin-bottom:5px") Show Advanced General Administration
+        .advanced-controls.hidden
+            h3(style="margin-top: 20px;") Advanced General Administration
+            .flex-wrap
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Data Tools
+                    div(style='padding: 5px;')
+                        |1&nbsp;
+                        a(href="/admin/visits/orphaned-pos").btn.btn-primary LIST POS-Orphaned Visits
+                    div(style='padding: 5px;')
+                        |2&nbsp;
+                        a(href="/admin/pos/duplicates").btn.btn-primary List POS Duplicates
+                    div(style='padding: 5px;')
+                        |3&nbsp;
+                        a(href="/admin/pos/duplicates?imports-only=true").btn.btn-primary List POS Duplicates from import
+                    div(style='padding: 5px;')
+                        |4&nbsp;
+                        a(title="Goes through all samples and recomputes temperature conformance").btn.btn-warning.recompute-sample-temp Recompute Sample Temp. Conformance
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Data Management
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-array-form-btn-erase-data.btn.btn-danger(title="Clears all user-driven data, such as samples, visits, and storechecks") Erase User-Entered Data
+                    div(style='padding: 5px;')
+                        |2
+                        button(type='button').admin-button-array-form-btn-erase-all-data.btn.btn-danger(title="Clears all data (except sessions) - usually the first step for restoring from a backup") Wipe All Data
+                    div(style='padding: 5px;')
+                        |3
+                        button(type='button').admin-button-array-form-btn-take-backup.btn.btn-danger(title="Create a backup now.") Take backup
+                    div(style='padding: 5px;')
+                        |4
+                        button(type='button').admin-button-array-form-btn-restore-backup.btn.btn-danger(title="Restore from backup.  For a complete recovery, you probably want to clear all first.  Do not log out before restoring after you delete all.  Make sure it's a .tar.gz file.") Restore from backup
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Dynamic Config Init
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-init-dynamic-config.btn.btn-danger Init/Reset Dynamic Config
+                .well(style='margin-bottom: 0; margin-right: 10px; margin-top: 10px;')
+                    h4 Server Management
+                    div(style='padding: 5px;')
+                        |1
+                        button(type='button').admin-button-restart-server.btn.btn-danger Restart Server
+
+block append scripts
+    link(type='text/css', href='/vendor/css/jquery.fileupload.css',  rel='stylesheet')
+    script(src='/vendor/jquery.ui.widget.js')
+    script(src='/vendor/fileupload/jquery.fileupload.js')
+    script(src='/vendor/fileupload/jquery.iframe-transport.js')
+    script(src='/js/widgets/admin-button-array.js')

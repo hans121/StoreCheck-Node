@@ -1,0 +1,59 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 Organizations
+            .pull-right
+                button.btn.btn-primary(style='margin-bottom:5px;', onclick='window.location.href="/organization/view/create";')
+                    i.icon-plus.icon-white.icon-inner
+                    |Add New
+        div(style="width:100%; overflow-y:auto")
+            table.table.table-bordered.table-striped
+                thead
+                    tr
+                        th Name
+                        th(style='width:100px') Type
+                        th(style='width:100px') Code
+                        th(style='width:100px') Status
+                        th(style='width:200px') Creation Time
+                        th Sub-Organizations
+                        th(class="sorter-false filter-false", style='width:50px')
+                tbody
+                    - for(var i = 0; i < orgs.length; i++)
+                        tr
+                            td
+                                a(href="/organization/view/" + orgs[i]._id)= orgs[i].name
+                            td= orgs[i].type
+                            td= orgs[i].code
+                            td= orgs[i].state
+                            td= formatter.formatDateTimeAsLocal(orgs[i].creation_time)
+                            td= orgs[i].children.join()
+                            td
+                                div(align="right")
+                                    a(href="/organization/view/" + orgs[i]._id, style="color: #00aa00;")
+                                        i.icon-pencil.ui-tooltip(data-placement="bottom", data-original-title="Edit")
+                                    a(onclick="oc.deleteOrganizationWithConfirmation(\"" + orgs[i]._id + "\");", style="margin-left: 10px; cursor: pointer; color: #aa0000;")
+                                        i.icon-remove.ui-tooltip(data-placement="bottom", data-original-title="Delete")
+            mixin table_pager()
+        .pager-mobile
+            mixin table_pager()
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/organizationController.js')
+    script.
+        var oc;
+        $(function() {
+            oc = new OrganizationController();
+            sortable_table.init('table');
+        });

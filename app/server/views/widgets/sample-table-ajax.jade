@@ -1,0 +1,34 @@
+include ../widgets/table-pager
+
+block content
+    mixin sample_table_ajax(samples_in, table_container_class, role, controller)
+        .status-text.text-center
+        table(width="100%", style="font-size: small;").table-striped.table-bordered.table
+            thead
+                tr
+                    th(style="width: 18px;", data-sorter="false").filter-false
+                        input.selectAll(type="checkbox")
+                    th(class="sorter-shortDate", style="width: 90px;") Visit Date
+                    th Store Check
+                    th(style="padding-right: 15px; width: 70px;") ID
+                    th POS
+                    th Product
+                    th Auditor
+                    th(style="width: 100px;") Best Before
+                    th Batch
+                    th Factory
+                    th(style="width: 70px;") Images
+                    th(style="width: 75px;") Defects
+                    th.filter-false(style="width: 25px;", data-sorter="false") Note
+                    th(style="width: 35px;") Status
+                    th(style="width: 25px;", data-sorter="false").filter-false
+                tbody
+        mixin table_pager()
+
+        script(src='/vendor/purl.js')
+        script(src='/js/widgets/sample-table-ajax.js')
+        script.
+            $(function() {
+                var sample_ids = "!{typeof(samples_in) === undefined ? [] : samples_in}";
+                sample_table_ajax_control.initAjax(sample_ids, $("!{table_container_class} > table"), "!{role}");
+            });

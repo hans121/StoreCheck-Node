@@ -1,0 +1,250 @@
+//- NOTE: this component contains forms, and it is vital that whichever module/view it is a part of not put it into an external form
+include ../modals/single-input-modal
+block append scripts
+    style.
+        .SI-FILES-STYLIZED label.cabinet
+        {
+            width: 49px;
+            height: 22px;
+
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .SI-FILES-STYLIZED label.cabinet input.file
+        {
+            position: relative;
+            height: 100%;
+            width: auto;
+            opacity: 0;
+            -moz-opacity: 0;
+            filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        }
+        td.properties .property {
+            clear: left;
+        }
+        td.properties .property-label {
+            font-weight: bold;
+            float: left;
+            margin-right: 5px;
+        }
+
+        td.properties .property-value {
+            float: left;
+        }
+
+mixin camera_input(sample_id, question_id, has_image)
+    -if(has_image)
+        div(style="position: relative; height: 55px;")
+            label.cabinet
+                a.btn.btn-primary(href="javascript:;",title="Select image...", style="color: white; position: absolute; left: 5px; padding: 2px 12px;")
+                    i.icon.icon-camera.icon-white
+                input(type="file", accept="image/*", name="question_" + question_id + "_" + sample_id + "_image", style="cursor: pointer; filter: alpha(opacity=0);-ms-filter:&quot;progid:DXImageTransform.Microsoft.Alpha(Opacity=0)&quot;;opacity:0;background-color:transparent;color:transparent;").file
+            a.btn.btn-primary.btn-remove-image(href="javascript:;",title="Remove image...", style="color: red; position: absolute; left: 6px; top: 28px; padding: 0 13px;", onclick="sample_grid_control.removeImage(pc, '" + sample_id + "','" + question_id + "');")
+                i.icon.icon-remove.icon-white
+    -else
+        div(style="position: relative; max-height: 55px;")
+            label.cabinet
+                a.btn.btn-small.btn-primary(href="javascript:;",title="Select image...", style="color: white; position: absolute; left: 5px; padding: 2px 12px;")
+                    i.icon.icon-camera.icon-white
+                input(type="file", accept="image/*", name="question_" + question_id + "_" + sample_id + "_image", style="cursor: pointer; filter: alpha(opacity=0);-ms-filter:&quot;progid:DXImageTransform.Microsoft.Alpha(Opacity=0)&quot;;opacity:0;background-color:transparent;color:transparent;").file
+
+mixin conformance_box(answer)
+    -if(answer.weight == 'CONFORM' || answer.weight == 'A')
+        .conformance_box(style="background-color: #00EE00;")
+    -else if(answer.weight == 'ALERT' || answer.weight == 'B')
+        .conformance_box(style="background-color: #EEEE00;")
+    -else if(answer.weight == 'NON-CONFORM' || answer.weight == 'C')
+        .conformance_box(style="background-color: #EE0000;")
+    -else
+        .conformance_box(style="background-color: #EEEEEE;")
+
+mixin sample_grid_select(sample, read_only)
+    -if(read_only)
+        -each answer in sample.question.answers
+            -if(answer.value == "true")
+                =answer.text
+    -else
+        select.answer_field(id='answer_' + sample._id,class='answer_' + sample.question.identity_id,name=sample._id,disabled=(sample.state=='released'))
+            -sample.question.selected_answer = false;
+            -each answer in sample.question.answers
+                -if(answer.value == "true")
+                    -sample.question.selected_answer = true;
+                option(value=answer.identity_id, selected=(answer.value == "true"))= answer.text
+            -if(!sample.question.selected_answer)
+                option(value="", selected="true")
+
+mixin sample_text(sample, read_only)
+    -if(sample.question.category_specific == category_specific.CategorySpecific.RADIO_CHOICES)
+        -if(read_only)
+            -for (var j=0; j <sample.question.answers.length; j++)
+                -if(sample.question.answers[j].value == "true")
+                    =sample.question.answers[j].text
+        -else
+            - each answer in sample.question.answers
+                div(style="clear: both; min-height: 25px;")
+                    mixin conformance_box(answer)
+                    input.answer_field.pull-left(type="radio",data-answer=answer.identity_id,class='answer_' + answer.identity_id,name=sample._id, style="margin-top: 2px; margin-right: 5px;",checked=(answer.value == "true"),disabled=(sample.state=='released'))
+                    = answer.text
+                    br
+    -else if(sample.question.category_specific == category_specific.CategorySpecific.LIST_MULTIPLE_CHOICES)
+        -if(read_only)
+            - each answer in sample.question.answers
+                -if(answer.value == "true")
+                    =answer.text
+                    br
+        -else
+            - each answer in sample.question.answers
+                div(style="clear: both; min-height: 25px;")
+                    mixin conformance_box(answer)
+                    input.answer_field.pull-left(type="checkbox", data-sample=sample._id.toHexString(), data-weight=answer.weight, data-answer=answer.identity_id, class='answer_' + answer.identity_id, name=sample._id, style="margin-top: 2px; margin-right: 5px;",checked=(answer.value == "true"),disabled=(sample.state=='released'))
+                    = answer.text
+                    br
+    -else if(sample.question.category_specific == category_specific.CategorySpecific.LIST_CHOICES)
+        mixin sample_grid_select(sample, read_only)
+    -else if(sample.question.category_specific == category_specific.CategorySpecific.NUMERIC_VALUE)
+        -if(read_only)
+            =sample.question.answers[0].value
+        -else
+            input.answer_field(type="text", id="answer_" + sample._id, class="answer_field float_only", value=sample.question.answers[0].value)
+    -else if(sample.question.category_specific == category_specific.CategorySpecific.FREE_TEXT)
+        -if(read_only)
+            =sample.question.answers[0].value
+        -else
+            input.answer_field(type="text", id="answer_" + sample._id, class="answer_field", value=sample.question.answers[0].value)
+    -else if(sample.question.category_specific == 2)
+        -if(read_only)
+            =sample.question.answers[0].value
+        -else
+            div.input-append.date.datepicker(data-date=sample.question.answers[0].value, data-date-format="dd-M-yy")
+                input.answer_field.answer_date_entry(placeholder="dd-mmm-yyyy", id="answer_" + sample._id, size="16", type="text", value=sample.question.answers[0].value, style="width: 110px; margin-right: -3px;")
+                span.add-on.calendar-add-on(style="padding-bottom: 17px;")
+                    i.icon-calendar
+    -else
+        div=sample.question.category_specific + 'Bad Data in template: unrecognized category'
+
+mixin sample_grid(samples, read_only)
+    mixin single_input_modal("sample-batch-code-modal", "Enter Batch Code", "Enter a batch code", "Cancel", "Save", "text")
+    mixin single_input_modal("sample-note-modal", "Modify Sample Note", "", "Cancel", "Save", "textarea")
+    form.sample-table-file-upload-form(method="post",enctype="multipart/form-data",action="/sample/images",class="form-horizontal form-images")
+        table.table.table-bordered.table-striped.sample-table
+            thead
+                tr
+                    th Sample
+                    th(style='width:60px') Image
+                    th= (samples.length > 0 ? samples[0].question.level5_description2 : '')
+                    -if(!read_only)
+                        th(style="width: 35px;")
+            tbody
+                - each sample in samples
+                    - sample_is_read_only = read_only || (sample.state != 'draft' && sample.state != 'to-be-corrected');
+                    tr
+                        td.properties(style="max-width: 300px;", data-id=sample._id.toHexString())
+                            -if(!sample_is_read_only)
+                                .pull-right
+                                    div(style="margin-top: 5px;")
+                                        button.btn.btn-info.ui-tooltip(onclick='sample_grid_control.editNote(pc, "' + sample._id + '", "' + sample.note + '"); return false;', data-placement="bottom", title="Modify note", style="padding: 5px 8px;")
+                                            i.icon-file-alt.icon-white(style="padding-left: 0;")
+                                //-.pull-right
+                                    div
+                                    div(style="margin-top: 5px;")
+                                        button.btn.btn-primary(onclick='window.location.href="/sample/view/' + sample._id + '"; return false;', title="View Sample", style="padding: 5px 8px;")
+                                            i.icon-pencil.icon-white(style="padding-left: 0;")
+                            .property
+                                .property-label= "ID: "
+                                .property-label
+                                    a(href="/sample/view/" + sample._id, style="color: #4397ff;")= sample.name
+                            -if(sample.best_by_date && sample.best_by_date.length > 0)
+                                .property
+                                    .property-label= "Best Before: "
+                                    .property-value= sample.best_by_date
+                            -if(sample.batch_code && sample.batch_code.length > 0)
+                                .property
+                                    .property-label= "Batch: "
+                                    .property-value= sample.batch_code
+                                        //--if(sample.state != 'released' && !read_only)
+                                            button.btn.btn-primary(onclick='sample_grid_control.editBatchCode(pc, "' + sample._id + '", "' + sample.batch_code + '"); return false;', title="Edit Batch Code", style="margin-left: 2px; padding: 0 2px; margin-top: -2px;")
+                                                i.icon-pencil.icon-white(style="padding-left: 0;")
+                            //-else
+                                div
+                                    span(style="font-weight: bold;")= "Batch: "
+                                    //-if(sample.state != 'released' && !read_only)
+                                        button.btn.btn-primary(onclick='sample_grid_control.editBatchCode(pc, "' + sample._id + '", "' + sample.batch_code + '"); return false;', title="Edit Batch Code", style="margin-left: 2px; padding: 0 2px; margin-top: -2px;")
+                                            i.icon-pencil.icon-white(style="padding-left: 0;")
+                            -if(sample.production_line_code && sample.production_line_code.length > 0)
+                                .property
+                                    .property-label= "Prod. Line: "
+                                    .property-value= sample.production_line_code
+                            -if(sample.factory_code && sample.factory_code.length > 0)
+                                .property
+                                    .property-label= "Factory: "
+                                    .property-value= sample.factory_code
+                            .property
+                                .property-label= "Status: "
+                                .property-value= sample.state
+                            -if(sample.note && sample.note.length > 0)
+                                .property.note-container
+                                    .property-label= "Note: "
+                                    .property-value= sample.note
+                        //- image
+                        td(style="text-align: center;")
+                            -if(typeof sample.question.image_urls != 'undefined' && sample.question.image_urls.length > 0 && sample.question.image_urls[0] != '')
+                                img(style="width:48px; height: 48px;",src='/img/has-image.png',image-url=sample.question.image_urls[0],class="imagepreview_" + sample._id + '_' + sample.question.identity_id).imagepreview
+                            -else
+                                img(style="width:48px; height: 48px;",class="imagepreview_" + sample._id + '_' + sample.question.identity_id, src="/img/no-image.jpg")
+                            -if(!sample_is_read_only && sample.state != 'released')
+                                mixin camera_input(sample._id, sample.question.identity_id, (typeof sample.question.image_urls != 'undefined' && sample.question.image_urls.length > 0 && sample.question.image_urls[0] != ''))
+                        //- use the appropriate background color
+                        -if(sample.non_conform.indexOf(sample.question.identity_id) != -1 || sample.question.temperature_conformance == "non-conform" )
+                            td(style="background-color: #DD0000; color: #FFF;")
+                                mixin sample_text(sample, sample_is_read_only)
+                        - else if(sample.alerts.indexOf(sample.question.identity_id) != -1|| sample.question.temperature_conformance == "alert" )
+                            td(style="background-color: #EEEE00;")
+                                mixin sample_text(sample, sample_is_read_only)
+                        - else
+                            td(style="")
+                                mixin sample_text(sample, sample_is_read_only)
+                        //- duplicate button
+                        -if(!read_only)
+                            td
+                                -if(!sample_is_read_only)
+                                    button.btn.btn-warning.btn-copy-across-samples.pull-right.ui-tooltip(id="copy_button_"+sample._id, data-placement="bottom", title="Copy across samples", style="padding: 5px 8px;")
+                                        i.icon-copy.icon-white(id="copy_icon_"+sample._id, style="padding-left: 0;")
+
+block append scripts
+    script(src='/vendor/si.files.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/widgets/sample-grid.js')
+    script(src='/js/util/general-util.js')
+    script.
+        var sample_grid_container, pc;
+        $(function() {
+            pc = new PageController();
+            SI.Files.stylizeAll();
+
+            sample_grid_container = $('.sample-table-file-upload-form');
+            sample_grid_control.init(sample_grid_container);
+
+            var inputs = sample_grid_container.find('input[type="file"]');
+            inputs.change(function(e) {
+                if (typeof(this.files) == 'undefined') return;
+
+                pc.showLoadingMessage('Saving image...');
+
+                var question_id = $(e.target).attr('name').split('_')[1];
+                var sample_id = $(e.target).attr('name').split('_')[2];
+                var file = this.files[0];
+
+                var imageReader = new FileReader();
+                imageReader.onload = function (event) {
+                    $('.imagepreview_' + sample_id + '_' + question_id).attr('src', '/img/has-image.png').show();
+                    sample_grid_control.submitImages(pc);
+                };
+                imageReader.readAsDataURL(file);
+            });
+
+            $('.answer_date_entry').datepicker({format: 'dd-M-yyyy', changeYear: true, autoclose: true});
+            general_util.allowOnlyFloat('input.float_only');
+        });
+

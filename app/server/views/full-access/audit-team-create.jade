@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/audit-team-form-fields
+    include ../widgets/audit-team-user-list
+
+    - accts = []
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        form( method="post", style="position: relative;")#audit-team-form.form-horizontal.well
+            h3 Create Auditor Team
+            p
+                .subheading Please name the new auditor team
+                .subheading You will be able to assign auditors once it is created
+            hr
+            mixin audit_team_form_fields()
+            .form-actions(style="text-align:center")
+
+                    button(type='button', onclick='goToList();', style="margin-right: 5px;")#audit-team-form-btn-cancel.btn.btn-warning Cancel
+                    button(type='button')#audit-team-form-btn-create.btn.btn-primary Save
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/auditTeamController.js')
+    script.
+        var atc;
+        $(function() {
+            atc = new AuditTeamController();
+        });
+        function goToList() {
+            window.location.href = "/audit-teams/view";
+        }

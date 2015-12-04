@@ -1,0 +1,101 @@
+block content
+
+    style(type='text/css')
+        .product_field_set .col-sm-8 {
+            overflow: hidden;
+        }
+
+        .product_field_set input {
+            width: 98%;
+            padding: 1%;
+        }
+
+mixin product_form_fields(product, read_only)
+    - hasProduct = (typeof(product) != 'undefined');
+    div(style="padding-left: 20px;")
+        .form-group
+            .control-group
+                label.control-label.col-sm-4 Product Code
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.product_code : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.product_code : "")).input-product-code
+            .control-group
+                label.control-label.col-sm-4 Description
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.description : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.description : "")).input-product-description
+            .control-group
+                label.control-label.col-sm-4 Description 2
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.description2 : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.description2 : "")).input-product-description2
+            .control-group
+                label.control-label.col-sm-4 Description 3
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.description3 : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.description3 : "")).input-product-description3
+            .control-group
+                label.control-label.col-sm-4 Default Factory
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.default_factory : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.default_factory : "")).input-default-factory
+            .control-group
+                label.control-label.col-sm-4 Default Production Line
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.e06_code : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.e06_code : "")).input-default-production-line
+            .control-group
+                label.control-label.col-sm-4 Pick Up
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.pickup : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.pickup : "")).input-pickup
+            .control-group
+                label.control-label.col-sm-4 Flavor
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.flavor : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.flavor : "")).input-flavor
+            .control-group
+                label.control-label.col-sm-4 Type
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.type : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.type : "")).input-type
+            .control-group
+                label.control-label.col-sm-4 Format
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.format : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.format : "")).input-format
+            .control-group
+                label.control-label.col-sm-4 EAN 13
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.ean_13 : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.ean_13 : "")).input-ean13
+            .control-group
+                label.control-label.col-sm-4 Global Brand
+                .col-sm-8
+                    -if(read_only)
+                        label.form-control= (hasProduct ? product.global_brand : "")
+                    -else
+                        input.form-control(value=(hasProduct ? product.global_brand : "")).input-global-brand
+

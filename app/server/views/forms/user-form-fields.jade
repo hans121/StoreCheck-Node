@@ -1,0 +1,64 @@
+mixin user_form_fields()
+    - user = typeof(user) == 'undefined' ? { name: "", email: "", active_organization: null } : user;
+    - auditTeams = typeof(auditTeams) == 'undefined' ? [] : auditTeams;
+
+    - function sortRoles(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - roles = typeof(roles) == 'undefined' ? [] : roles.sort(sortRoles);
+
+
+    h3
+    - if(user.user == caller.user)
+        p.subheading Please tell us a little about yourself.
+    else
+        p.subheading Please tell us a little about this user.
+    hr
+    #name-cg.form-group
+        label.control-label.col-sm-4(for='name-tf') Name
+        .col-sm-8
+            input#name-tf.form-control(type='text', name='name', value= user.name)
+    #email-cg.form-group
+        label.control-label.col-sm-4(for='email-tf') Email
+        .col-sm-8
+            input#email-tf.form-control(type='text', name='email', value= user.email)
+    - if(locals.canViewRole)
+        #clist-cg.form-group
+            label.control-label.col-sm-4(for='role-list') Role
+            .col-sm-8
+                span.form-control.select2-field
+                    - if(locals.canEditRole)
+                        select.role-list(name='role')
+                            -each item in roles
+                                option(value=item.short, selected=(user.roles ? item.short == user.roles[0] : false) || roles.length == 1)= item.name
+                    - else
+                        select.role-list(name='role', disabled="true")
+                            -each item in roles
+                                option(value=item.short, selected=(user.roles ? item.short == user.roles[0] : false) || roles.length == 1)= item.name
+    - if(locals.canEditUserOrg)
+        #olist-cg.form-group
+            label.control-label.col-sm-4 Active Org.
+            .col-sm-8
+                span.form-control.select2-field
+                    select.active-organization(name='activeOrganization')
+                        option
+                        -each item in orgs
+                            option(value=item._id, selected=item._id == user.active_organization)= item.name
+    -if(auditTeams.length > 0)
+        #teamlist-cg.form-group
+            label.control-label.col-sm-4 Team Assignment
+            .col-sm-8
+                span.form-control.select2-field(style="display: inline-block;")
+                    select.user-team.audit-team(style="width: 100%;").pull-left
+                        option
+                        -each item in auditTeams
+                            option(value=item._id, selected=(auditTeams.length == 1))= item.name
+    hr(style="clear: both;")
+    p#sub2.subheading
+    #user-cg.form-group
+        label.control-label.col-sm-4(for='user-tf') Username
+        .col-sm-8
+            input#user-tf.form-control(type='text', name='user', value= typeof(user.user) == 'undefined' ? "" : user.user)
+    #pass-cg.form-group
+        label.control-label.col-sm-4(for='pass-tf') Password
+        .col-sm-8
+            input#pass-tf.form-control(type='password', name='pass', value='')
+    .clearfix

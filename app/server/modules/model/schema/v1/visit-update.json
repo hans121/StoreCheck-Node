@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/visit/update",
+    "title": "visit-update",
+    "description": "a visit update request body",
+    "required":false,
+    "properties":{
+        "date_of_visit": {
+            "type": "string",
+            "required": true
+        },
+        "auditor_name": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}

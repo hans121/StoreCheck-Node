@@ -1,0 +1,16 @@
+mixin message_bar(type, message)
+    -if(type == 'success')
+        .success-message(style="border: 1px solid #006600; background-color: #5bb75b; text-shadow: -1px 1px 1px #777; color: #FFF; padding: 5px;")
+            i.icon-ok(style="margin-left: 5px; margin-right: 8px; zoom: 1.25; color: #fff;")
+            = message
+    //- while this is sensible, we are using modals and remaining on the page for error messages.  This causes error messages to pile up in the queue
+    //- so we don't want to see a bunch of error messages after someone has a few validation errors on a screen before succeeding.
+    //-else if(type == 'error')
+    //-    .error-message(style="border: 1px solid #660000; background-color: #e95d4e; text-shadow: -1px 1px 1px #777; color: #FFF; padding: 5px;")
+    //-        i.icon-remove(style="margin-left: 5px; margin-right: 8px; zoom: 1.25; color: #fff;")
+    //-        = message
+
+mixin message_bar_container()
+    -for(var i=0; i < messages.length; i++)
+        div(style="margin-bottom: 10px;")
+            mixin message_bar(messages[i].type, messages[i].message)

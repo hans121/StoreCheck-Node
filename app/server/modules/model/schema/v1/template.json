@@ -1,0 +1,92 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "id": "v1/template",
+    "title": "template",
+    "description": "template as returned by Store Check service queries",
+    "required": true,
+    "properties": {
+        "_id" : {
+            "type": "string"
+        },
+        "records" : {
+            "type": "array",
+            "required": true,
+            "minItems": 1,
+            "items": {
+                "properties": {
+                    "language": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "t03_code": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "t03_description": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "company_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "category_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "questions" : {
+                        "type": "array",
+                        "required": true,
+                        "minItems": 1,
+                        "properties": {
+                            "items": {
+                                "identity_id" : {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "answers" : {
+                                    "type": "array",
+                                    "items": {
+                                        "identity_id" : {
+                                            "type": "string"
+                                        },
+                                        "active": {
+                                            "type": "boolean"
+                                        },
+                                        "default_value": {
+                                            "type": "string" },
+                                        "weight": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "organization_id": {
+            "type": "string"
+        },
+        "creation_time": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "last_update_time": {
+            "type": "string"
+        },
+        "created_by": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "state": {
+            "enum": [ "active", "inactive" ]
+        }
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/visit",
+    "title": "visit",
+    "description": "visit as returned by Store Check service queries",
+    "required": false,
+    "properties": {
+        "_id": {
+            "type": "string",
+            "required": true
+        },
+        "status": {
+            "enum": [ "draft", "validated", "released" ]
+        },
+        "auditor_id": {
+            "type": "string",
+            "required": true
+        },
+        "auditor_name": {
+            "type": "string"
+        },
+        "audit_grid_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "date_of_visit": {
+            "type": "string"
+        },
+        "samples": {
+            "type": "array",
+            "required": true,
+            "items": {
+                "type": "string",
+                "required":true,
+                "minLength": 12
+            }
+        },
+        "last_update_time": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "minLength": 3
+        },
+        "pos_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "product_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "store_check_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}

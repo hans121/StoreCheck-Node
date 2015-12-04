@@ -1,0 +1,33 @@
+{
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/audit-team",
+    "title": "audit-team",
+    "description": "audit-team as returned by Store Check service queries",
+    "required": true,
+    "properties":{
+        "_id": {
+            "type": "string"
+        },
+        "created": {
+            "type": "string"
+        },
+        "members": {
+            "type": "array",
+            "items": {
+                "type":"string",
+                "required":false
+            }
+        },
+        "name": {
+            "type":"string",
+            "required": true
+        },
+        "organization_id": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}

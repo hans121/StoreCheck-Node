@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/user-form-fields
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .well(style="position: absolute; left: 50%; width: 400px; margin-left: -200px;")
+            form( method="post").form-horizontal.well
+                mixin user_form_fields()
+            .form-actions
+                .pull-left
+                    button(type='button',onclick='window.history.back();').btn.btn-warning
+                        |Cancel
+                .pull-right
+                    button(type='button')#account-form-delete-btn.btn.btn-danger
+                    button(type='button')#account-form-btn2.btn.btn-primary
+
+block append scripts
+    link(type='text/css', href='/vendor/css/select2.min.css',  rel='stylesheet')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/userController.js')
+    script(src='/js/form-validators/accountValidator.js')
+    script(src='/vendor/select2.min.js', type='text/javascript')
+    script.
+        var uc, validator;
+        $(function($){
+            validator = new AccountValidator();
+            uc = new UserController(validator);
+            uc.initUserCreate();
+        });

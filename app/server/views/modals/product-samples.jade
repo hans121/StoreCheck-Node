@@ -1,0 +1,51 @@
+mixin product_samples_dialog(products, templates)
+
+    - function sortProductByName(a, b) { var as = a.description3.toLowerCase(), bs = b.description3.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - products = products.sort(sortProductByName);
+
+    - function sortTemplatesByName(a, b) { var as = a.name.toLowerCase(), bs = b.name.toLowerCase(); return (as > bs ? 1 : (as < bs ? -1 : 0)); }
+    - templates = templates.sort(sortTemplatesByName);
+
+    .product-samples-modal.modal-info.modal(data-backdrop="static", style="height: 320px;")
+        .modal-header
+            button.close(data-dismiss='modal', style="color: white;")
+                i.icon-remove
+            h3 Add Product to Store Check
+        .modal-body(style="padding: 10px;")
+            form( method="post", style="margin-bottom: 0;")#product-create-form.form-horizontal.well
+                fieldset
+                    .form-group
+                        .control-group.product-select
+                            label.control-label.col-sm-4 Product/SKU
+                            .col-sm-8
+                                select.product
+                                    - for (var i = 0; i < products.length; i++)
+                                        option(value=products[i]._id)= products[i].description3
+                    .form-group
+                        .control-group.audit-grid-template-select
+                            label.control-label.col-sm-4 Audit Grid Template
+                            .col-sm-8
+                                select(style="").audit-grid-template
+                                    - for (var i = 0; i < templates.length; i++)
+                                        option(value=templates[i]._id)= templates[i].name
+        .modal-footer
+            button(data-dismiss="modal").btn.btn-warning Cancel
+            button.submit.btn.btn-primary Save
+
+block append scripts
+    script.
+        $(function() {
+            var dlg = $('.product-samples-modal');
+            $(dlg).find('select.product').select2({
+                placeholder: "Select an audit grid template",
+                allowClear: false
+            });
+            $(dlg).find('select.audit-grid-template').select2({
+                placeholder: "Select an audit grid template",
+                allowClear: false
+            });
+        })
+    style.
+        .product-samples-modal .select2-container {
+            width: 100%;
+        }

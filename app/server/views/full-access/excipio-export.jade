@@ -1,0 +1,54 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3.pull-left Excipio Export Analyzer
+        .controls.pull-right
+            //- PLACEHOLDER
+            span.btn.btn-primary.fileinput-button(style="margin-left: 5px;")
+                span Load File
+                input.import-file-button(type="file", name="files[]", multiple)
+        .clearfix
+        .results-container
+
+block append scripts
+    link(type='text/css', href='/vendor/css/jquery.fileupload.css',  rel='stylesheet')
+    script(src='/vendor/jquery.ui.widget.js')
+    script(src='/vendor/fileupload/jquery.fileupload.js')
+    script(src='/vendor/fileupload/jquery.iframe-transport.js')
+    script(src='/js/widgets/admin-button-array.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/vendor/purl.js')
+    script(src='/js/pages/excipio-export.js')
+    style.
+        .excipio-label {
+            width: 130px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .duplicate-label {
+            display: inline-block;
+            color: red;
+            margin-left: 5px;
+        }
+        .results-container a {
+            color: #555;
+            font-style: italic;
+            text-decoration: underline;
+        }
+        hr {
+            border-color: #666;
+        }
+        .results-container {
+            padding-bottom: 20px;
+        }

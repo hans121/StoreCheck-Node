@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "id": "v1/store-check",
+    "title": "store-check",
+    "description": "store-check as returned by Store Check service queries",
+    "required": true,
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "organization_id": {
+            "type": "string"
+        },
+        "state": {
+            "enum": [ "active", "closed" ]
+        },
+        "type": {
+            "enum": [ "internal", "external" ]
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "minLength": 3
+        },
+        "reportDate": {
+            "type": "string"
+        },
+        "notes": {
+            "type": "string"
+        },
+        "last_update_time": {
+            "type": "string"
+        },
+        "creation_time": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "assignment_ids" : {
+            "type": "array",
+            "required": false,
+            "minItems": 0,
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

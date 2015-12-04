@@ -1,0 +1,55 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../widgets/sample-table-ajax
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        .pull-left
+            h3.pull-left= title
+            .pull-left(style="color: #333;")
+                .help-me-widget.ui-popover(style="margin-top: 4px; vertical-align: top;", data-placement="bottom", title="Samples Help", data-trigger="hover", data-html="true", data-content='This shows all samples for your audit team.<br><strong>Shift+click</strong> column headers to sort by multiple columns')
+                    i.icon-question(style="margin-left: -1px;")
+        .pull-right(style="position: relative")
+            button.btn.btn-warning.sample-selection-btn.submit-samples-btn(style="margin-left: 10px; display: none;") Submit Selected
+            button.btn.btn-warning.sample-selection-btn.release-samples-btn(style="margin-left: 10px; display: none;") Release Selected
+            button.btn.btn-warning.sample-selection-btn.validate-samples-btn(style="margin-left: 10px; display: none;") Validate Selected
+            button.btn.btn-warning.sample-selection-btn.revert-validate-samples-btn(style="margin-left: 10px; display: none;") Mark Selected As To-Be-Corrected
+            button.btn.btn-warning.sample-selection-btn.draft-samples-btn(style="margin-left: 10px; display: none;") Mark Selected As Draft
+            button.btn.btn-info.sample-selection-btn.view-grid-btn(style="margin-left: 10px; display: none;") View Selected On Grid
+            button.btn.btn-info.sample-selection-btn.export-samples-btn(style="margin-left: 10px; display: none;") Export Selected
+            button.btn.btn-danger.sample-selection-btn.delete-samples-btn(style="margin-left: 10px; display: none;") Delete Selected
+            -if(caller.roles.indexOf('supervisor') != -1 || caller.roles.indexOf('CBU') != -1)
+                a.btn.btn-info(href='/report/samples/view', style="margin-left: 5px;")
+                    i.icon-list
+        .pull-right
+            span.btn.btn-info.fileinput-button
+                span Import Samples
+                input.sample-import(type="file", name="files[]", data-url="/samples/import", multiple)
+        .clearfix
+        .sample-grid(style="padding-bottom: 10px;")
+            .table-container
+                mixin sample_table_ajax(typeof(samples) != 'undefined' ? samples : undefined, '.table-container', caller.roles[0], 'sc')
+        .pager-mobile
+            mixin table_pager()
+block append scripts
+    link(type='text/css', href='/vendor/css/tablesorter.css',  rel='stylesheet')
+    link(type='text/css', href='/vendor/css/jquery.fileupload.css',  rel='stylesheet')
+    script(src='/vendor/tablesorter/jquery.tablesorter.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.widgets.min.js')
+    script(src='/vendor/tablesorter/jquery.tablesorter.pager.min.js')
+    script(src='/vendor/natural-sort.js')
+    script(src='/vendor/moment.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/widgets/question-widget.js')
+    script(src='/js/controllers/sampleController.js')
+    script(src='/js/pages/sample-list.js')
+    script(src='/vendor/jquery.ui.widget.js')
+    script(src='/vendor/fileupload/jquery.fileupload.js')
+    script(src='/vendor/fileupload/jquery.iframe-transport.js')

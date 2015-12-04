@@ -1,0 +1,62 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/user",
+    "title": "user",
+    "description": "user as returned by Store Check service queries",
+    "required": true,
+    "properties":{
+        "active_organization_name": {
+            "type":"string",
+            "required":false
+        },
+        "active_organization": {
+            "type":"string",
+            "required":false,
+            "minLength": 12
+        },
+        "date": {
+            "type":"string",
+            "required":false
+        },
+        "email": {
+            "type":"string",
+            "required":true
+        },
+        "name": {
+            "type":"string",
+            "required":true
+        },
+        "organizations": {
+            "type":"array",
+            "required":false,
+            "items":
+            {
+                "type":"string",
+                "required":false,
+                "minLength": 12
+            }
+        },
+        "pass": {
+            "type":"string",
+            "required":false
+        },
+        "roles": {
+            "type":"array",
+            "required":false,
+            "items":
+            {
+                "type":"string",
+                "id": "http://jsonschema.net/roles/0",
+                "required":false
+            }
+        },
+        "user": {
+            "type":"string",
+            "required":true
+        },
+        "state": {
+            "enum": [ "active", "inactive" ]
+        }
+    }
+}

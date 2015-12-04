@@ -1,0 +1,46 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/visit/create",
+    "title": "visit-create",
+    "description": "a visit create request body",
+    "required": true,
+    "properties":{
+        "auditor_id": {
+            "type": "string",
+            "required": true
+        },
+        "auditor_name": {
+            "type": "string"
+        },
+        "date_of_visit": {
+            "type": "string",
+            "minLength": 10,
+            "required": true
+        },
+        "samples": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "required": true,
+                "minLength": 12
+            }
+        },
+        "last_update_time": {
+            "type": "string"
+        },
+        "pos_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "store_check_id": {
+            "type": "string",
+            "required": true,
+            "minLength": 12
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}

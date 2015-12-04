@@ -1,0 +1,14 @@
+include ../widgets/audit-team-user-list
+
+mixin select_user_dialog(root_class, header_text, users)
+    .modal(class=root_class, style="font-size: 13px; max-width: 900px; margin: auto; max-height: 500px;")
+        .modal-content
+            .modal-header
+                button.close(data-dismiss='modal', style="color: white;")
+                    i.icon-remove
+                h3= header_text
+            .modal-body(style="background: rgba(14,32,59,.5); overflow-y: auto; max-height: 500px; padding: 5px;")
+                .container-fluid
+                mixin audit_team_user_list(users, false, false)
+            .modal-footer
+                button.submit.btn.btn-sm(data-dismiss="modal") Ok

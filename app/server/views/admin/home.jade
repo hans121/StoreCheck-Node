@@ -1,0 +1,21 @@
+
+extends ../layout
+
+block content
+    include ../full-access/navbar
+    include ../widgets/admin-button-array
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+
+    mixin navbar()
+    mixin button_array()
+
+block append scripts
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script.
+        var pc = new PageController();
+        $(function() {
+            admin_button_array.init(pc);
+        });

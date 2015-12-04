@@ -1,0 +1,106 @@
+// required variables to be passed by express:
+// - L5_items: list of template L5 items
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../widgets/table-pager
+    include ../widgets/sortable-table
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/single-input-modal
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        h3 L5 Template Hierarchy
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped.table-L5
+                thead
+                    tr
+                        th(style="width: 100px;") T03 Code
+                        th Code
+                        th Description2
+                        th(style="width: 100px;") Identity ID
+                        th(style="width: 85px;") Cat. Spec.
+                        th(style="width: 125px;") Timestamp
+                        th.sorter-false.filter-false
+                tbody
+                    - each L5 in L5_items
+                        tr
+                            td= L5.t03_code
+                            td= L5.code
+                            td= L5.description2
+                            td= L5.identity_id
+                            td= L5.category_specific
+                            td= L5.timestamp
+                            td
+                                div(align="right")
+        mixin table_pager('L5-pager')
+
+        h3 Multi-Lingual L5 Template Hierarchy
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped.table-L5-lang
+                thead
+                    tr
+                        th(style="width: 100px;") T03 Code
+                        th(style="width: 85px;") Language
+                        th Code
+                        th Description2
+                        th(style="width: 100px;") Identity ID
+                        th(style="width: 85px;") Cat. Spec.
+                        th(style="width: 125px;") Timestamp
+                        th.sorter-false.filter-false
+                tbody
+                    - each L5 in L5_language_items
+                        tr
+                            td= L5.t03_code
+                            td= L5.language
+                            td= L5.code
+                            td= L5.description2
+                            td= L5.identity_id
+                            td= L5.category_specific
+                            td= L5.timestamp
+                            td
+                                div(align="right")
+        mixin table_pager('L5-lang-pager')
+
+        h3 Raw Template Hierarchy
+        div(style="width:100%;overflow-y:auto;")
+            table.table.table-bordered.table-striped.table-raw
+                thead
+                    tr
+                        th(style="width: 100px;") T03 Code
+                        th Code
+                        th(style="width: 65px;") Level
+                        th Description1
+                        th Description2
+                        th(style="width: 100px;") Identity ID
+                        th(style="width: 85px;") Cat. Spec.
+                        th.sorter-false.filter-false
+                tbody
+                    - each item in raw_hierarchy
+                        tr
+                            td= item.t03_code
+                            td= item.code
+                            td= item.hierarchy_level
+                            td= item.description1
+                            td= item.description2
+                            td= item.identity_id
+                            td= item.category_specific
+                            td
+                                div(align="right")
+        mixin table_pager('raw-pager')
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script.
+        var pc;
+        $(function($) {
+            pc = new PageController();
+            sortable_table.init('.table-L5', [[0,0], [1, 0], [2, 0] ], '.L5-pager');
+            sortable_table.init('.table-L5-lang', [[0,0], [1, 0], [2, 0], [3, 0]], '.L5-lang-pager');
+            sortable_table.init('.table-raw', [[0,0], [1, 0], [2, 0]], '.raw-pager');
+        });

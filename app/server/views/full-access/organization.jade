@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../modals/add-user
+    include ../forms/organization-form-fields
+
+    mixin navbar()
+    mixin add_user_dialog("add-new-user-dialog", "Add New User To Team")
+    .container
+        mixin message_bar_container()
+        form( method="post")#organization-form.form-horizontal.well
+            h3 Edit Organization
+            p.subheading Please provide details about the organization.
+            hr
+            mixin organization_form_fields(org, templates)
+            .form-actions
+                .pull-left
+                    button(type='button').btn.btn-info.btn-add-user-to-org Add New User
+                .pull-right
+                    button(type='button', onclick='window.location.href="/organizations/view";')#organization-form-btn-cancel.btn.btn-warning Cancel
+                    button(type='button')#organization-form-btn-save.btn.btn-primary Save
+
+block append scripts
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/organizationController.js')
+    script(src='/js/controllers/userController.js')
+    script.
+        var oc, uc;
+        $(function() {
+            validator = new AccountValidator();
+            uc = new UserController(validator);
+            uc.initUserCreate();
+
+            oc = new OrganizationController();
+            oc.setOrganizationId('#{org._id}');
+            oc.setUserController(uc);
+        });

@@ -1,0 +1,50 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "v1/audit-assignment",
+    "title": "audit-assignment",
+    "description": "audit-assignment as returned by Store Check service queries",
+    "required": true,
+    "properties":{
+        "_id": {
+            "type": "object",
+            "required": false,
+            "properties": {
+                "$oid": {
+                    "type": "string",
+                    "required": false
+                }
+            }
+        },
+        "assignment_time": {
+            "type": "string",
+            "required": false
+        },
+        "organization": {
+            "type": "string",
+            "required": false,
+            "minLength": 12
+        },
+        "storecheck_id": {
+            "type": "string",
+            "required": false,
+            "minLength": 12
+        },
+        "storecheck_name": {
+            "type": "string",
+            "required": false
+        },
+        "team_id": {
+            "type": "string",
+            "required": false,
+            "minLength": 12
+        },
+        "team_name": {
+            "type": "string",
+            "required": false
+        },
+        "state": {
+            "enum": [ "active", "inactive" ]
+        }
+    }
+}

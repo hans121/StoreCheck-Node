@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+    include ./navbar
+    include ../widgets/message-bar
+    include ../modals/alert
+    include ../modals/confirm
+    include ../modals/loading
+    include ../forms/product-form-fields
+
+    mixin navbar()
+    .container-fluid
+        mixin message_bar_container()
+        div(style="max-width: 1100px;")
+            form( method="post").form-horizontal.well
+                h3 Add New Product
+                hr
+                body
+                    .row
+                        mixin product_form_fields(undefined)
+                .form-actions
+                    .pull-right
+                        button(type='button')#product-create-form-btn-cancel.btn.btn-warning Cancel
+                        button(type='button')#product-create-form-btn-create.btn.btn-primary Create
+
+block append scripts
+    link(type='text/css', href='/vendor/bootstrap/css/bootstrap-datepicker.min.css',  rel='stylesheet')
+    script(src='/vendor/jquery.form.min.js')
+    script(src='/js/controllers/pageController.js')
+    script(src='/js/controllers/productController.js')
+    script(src='/vendor/bootstrap/bootstrap-datepicker.min.js')
+    script.
+        var pc;
+        $(function($){
+            pc = new ProductController();
+            pc.initCreate();
+        });
+
+
+

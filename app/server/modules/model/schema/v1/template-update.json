@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "id": "v1/template/update",
+    "title": "template-update",
+    "description": "a template update request body",
+    "required": true,
+    "properties": {
+        "_id" : {
+            "type": "string",
+            "required": false
+        },
+        "records" : {
+            "type": "array",
+            "required": true,
+            "minItems": 1,
+            "items": {
+                "properties": {
+                    "language": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "t03_code": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "t03_description": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "company_id": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "questions" : {
+                        "type": "array",
+                        "required": true,
+                        "minItems": 1,
+                        "properties": {
+                            "items": {
+                                "identity_id" : {
+                                    "type": "string",
+                                    "required": true
+                                },
+                                "answers" : {
+                                    "type": "array",
+                                    "items": {
+                                        "identity_id" : {
+                                            "type": "string"
+                                        },
+                                        "active": {
+                                            "type": "boolean"
+                                        },
+                                        "default_value": {
+                                            "type": "string" },
+                                        "weight": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "name": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        }
+    }
+}
